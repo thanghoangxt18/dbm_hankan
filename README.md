@@ -48,8 +48,13 @@ khởi động container.
 ＊Install module.
 docker compose exec web python3 odoo-bin -c /etc/odoo/odoo.conf -i {moduleName} -d {dbName} --db_host=db --db_user=odoo --db_password=myodoo --stop-after-init
 
-＊Reset module.
+＊Update module.
 docker compose exec web python3 odoo-bin -c /etc/odoo/odoo.conf -u {moduleName} -d {dbName} --db_host=db --db_user=odoo --db_password=myodoo --stop-after-init
+  Ex:
+    docker compose exec web python3 odoo-bin -c /etc/odoo/odoo.conf -u custom_obic_sale_order -d dbm_hankan --db_host=db --db_user=odoo --db_password=myodoo --stop-after-init
+
+＊Delete module.
+docker compose exec web python3 odoo-bin -c /etc/odoo/odoo.conf -d {moduleName} -d {dbName} --db_host=db --db_user=odoo --db_password=myodoo --stop-after-init
 ---------------------------------------------------------------------
 ＊Reset app (Mỗi lần cần upgrade reset lại app)
 docker compose restart web

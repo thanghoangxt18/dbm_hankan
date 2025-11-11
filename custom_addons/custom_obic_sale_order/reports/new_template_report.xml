@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="paperformat_new_layout_without_header" model="report.paperformat">
+        <field name="name">A4 New Layout without header</field>
+        <field name="default" eval="False" />
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">2</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">0</field>
+        <field name="disable_shrinking" eval="False" />
+        <field name="dpi">96</field>
+    </record>
+    <record id="action_report_new_layout" model="ir.actions.report">
+        <field name="name">Report New Layout</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_obic_sale_order.report_new_layout</field>
+        <field name="report_file">custom_obic_sale_order.report_new_layout</field>
+        <field name="print_report_name">'【%s_%s_v%s】 %s_newRP' % (object.name or '',
+            object.copy_number or '0', object.version_number or '1', object.project_name or '')</field>
+        <field name="binding_model_id" ref="sale.model_sale_order" />
+        <field name="binding_type">report</field>
+        <field name="paperformat_id"
+            ref="custom_obic_sale_order.paperformat_new_layout_without_header" />
+    </record>
+    <template id="report_new_layout">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page"
+                        style="width: 100%; margin: auto; font-family: 'MS Gothic', 'Hiragino Kaku Gothic Pro', 'Yu Gothic', Arial, sans-serif; font-size: 8pt; line-height: 1.4;">
+                        <t t-set="o" t-value="sale_order" />
+                        <t t-set="docs" t-value="[sale_order]" />
+                        <!-- Header: Title and Info -->
+                        <div
+                            style="position: relative; width: 100%; margin-top: 10px; font-size: 12px;">
+
+                            <!-- LEFT SECTION -->
+                            <div
+                                style="display: inline-block; vertical-align: top; border: none !important;">
+                                <h2 style="margin: 0;font-weight: bold;">受注明細書（製品）</h2>
+
+                                <!-- <table
+                                    style="border-collapse: collapse; line-height: 1.4; table-layout: auto; border:none !important">
+                                    <tr>
+                                        <td></td>
+                                        <td style="padding-right: 5px;">受注年月日：2025/06/05</td>
+                                        <td style="padding-left:15px">
+                                            <span style="border: 1px solid #000; padding: 2px 4px;">
+                                                受注NO：110000290462</span>
+                                        </td>
+                                        <td style="padding-right: 5px;">納入年月日：2025/06/20</td>
+                                        <td style="padding-right: 5px;">取引保証NO：</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-right: 5px;">部門：030341</td>
+                                        <td style="padding-right: 5px; padding-left:15px">宇都宮 営業 (03041)</td>
+                                        <td style="padding-right: 5px;">担当者：中田 貴裕</td>
+                                        <td></td>
+                                        <td style="padding-right: 5px;">回収予定日：2025/07/31</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="">プロジェクト：010000156954</td>
+                                        <td></td>
+                                    </tr>
+                                </table> -->
+                                <table
+                                    style="border-collapse: collapse; line-height: 1.4; table-layout: auto; border: none !important;">
+                                    <tr style="border: none !important;">
+                                        <td style="border: none !important;"></td>
+                                        <td style="border: none !important; padding-right: 5px;">
+                                            受注年月日：2025/06/05</td>
+                                        <td style="border: none !important; padding-left:15px">
+                                            <span style="border: 1px solid #000; padding: 2px 4px;">
+                                                受注NO：110000290462</span>
+                                        </td>
+                                        <td style="border: none !important; padding-right: 5px;">
+                                            納入年月日：2025/06/20</td>
+                                        <td style="border: none !important; padding-right: 5px;">
+                                            取引保証NO：</td>
+                                    </tr>
+                                    <tr style="border: none !important;">
+                                        <td style="border: none !important; padding-right: 5px;">
+                                            部門：030341</td>
+                                        <td
+                                            style="border: none !important; padding-right: 5px; padding-left:15px">宇都宮
+                                            営業 (03041)</td>
+                                        <td style="border: none !important; padding-right: 5px;">担当者：中田
+                                            貴裕</td>
+                                        <td style="border: none !important;"></td>
+                                        <td style="border: none !important; padding-right: 5px;">
+                                            回収予定日：2025/07/31</td>
+                                    </tr>
+                                    <tr style="border: none !important;">
+                                        <td style="border: none !important;"></td>
+                                        <td style="border: none !important;"></td>
+                                        <td style="border: none !important;">プロジェクト：010000156954</td>
+                                        <td style="border: none !important;"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <!-- RIGHT SECTION -->
+                            <div
+                                style="position: absolute; top: 0; right: 0; text-align: right; font-size: 11px; margin-top: 20px; border: none !important;">
+                                <div
+                                    style="display: inline-block; vertical-align: top; margin-right: 10px; position: relative; top: 20px; left:35px;">
+                                    <table
+                                        style="border-collapse: collapse; border: 1px solid #000;">
+                                        <tr>
+                                            <td
+                                                style="width: 45px; height: 45px; border-right: 1px solid #000;"></td>
+                                            <td
+                                                style="width: 45px; height: 45px; border-right: 1px solid #000;"></td>
+                                            <td style="width: 45px; height: 45px;"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div
+                                    style="display: inline-block; vertical-align: top; text-align: center;">
+                                    <span>2025年07月28日 10:49</span>
+                                    <br />
+                                    <span>PAGE：（1/1）</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <table
+                            style="width: 100%; border-collapse: collapse; font-size: 8pt; border: 1px solid black; margin-top: 10px;">
+                            <tr>
+                                <th colspan="2"
+                                    style="border: 1px solid black; width: 10%; text-align: left;">
+                                </th>
+                                <th style="border: 1px solid black; width: 30%; text-align: left;">
+                                    名称</th>
+                                <th style="border: 1px solid black; width: 15%; text-align: left;">
+                                    担当者</th>
+                                <th style="border: 1px solid black; width: 10%; text-align: left;">
+                                    TEL</th>
+                                <th style="border: 1px solid black; width: 10%; text-align: left;">
+                                    FAX</th>
+                                <th style="border: 1px solid black; width: 20%; text-align: left;">
+                                    住所</th>
+                            </tr>
+
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">得意先</td>
+                                <td style="border: 1px solid black; text-align: right;">11586042</td>
+                                <td style="border: 1px solid black; padding: 2px;">株式会社パートナー様 手配営業事所</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black; text-align: left;">
+                                    028-684-1894</td>
+                                <td style="border: 1px solid black; text-align: left;">
+                                    028-684-1898</td>
+                                <td style="border: 1px solid black; padding: 2px;">栃木県宇都宮市西3丁目6－1</td>
+                            </tr>
+
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">請求先</td>
+                                <td style="border: 1px solid black; text-align: right;">11586042</td>
+                                <td style="border: 1px solid black; padding: 2px;">株式会社パートナー様 手配営業事所</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black; text-align: left;">
+                                    028-684-1894</td>
+                                <td style="border: 1px solid black; text-align: left;">
+                                    028-684-1898</td>
+                                <td style="border: 1px solid black; padding: 2px;">栃木県宇都宮市西3丁目6－1</td>
+                            </tr>
+
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">納入先</td>
+                                <td style="border: 1px solid black; text-align: right;">12651300</td>
+                                <td style="border: 1px solid black; padding: 2px;">フレックシー R.W</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black; text-align: left;">
+                                    028-684-1894</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black; padding: 2px;">栃木県宇都宮市西丁目4-5</td>
+                            </tr>
+
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">管理会社</td>
+                                <td style="border: 1px solid black; text-align: right;">11586042</td>
+                                <td style="border: 1px solid black; padding: 2px;">株式会社パートナー様 手配営業事所</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black; text-align: left;">
+                                    028-684-1894</td>
+                                <td style="border: 1px solid black; text-align: left;">
+                                    028-684-1898</td>
+                                <td style="border: 1px solid black; padding: 2px;">栃木県宇都宮市西3丁目6－1</td>
+                            </tr>
+
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">紹介先</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">リース会社</td>
+                                <td style="border: 1px solid black; text-align: right;">1133900</td>
+                                <td style="border: 1px solid black; padding: 2px;">三菱HCキャピタル株式会社
+                                    IT設備部</td>
+                                <td style="border: 1px solid black;"></td>
+                                <td style="border: 1px solid black; text-align: left;">
+                                    03-6865-3197</td>
+                                <td style="border: 1px solid black; text-align: left;">
+                                    03-6701-2757</td>
+                                <td style="border: 1px solid black; padding: 2px;">東京都千代田区丸の内1－3－1
+                                    東京銀行ビルディング 5階</td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-bordered table-sm"
+                            style="width: 100%;margin-top: 10px; margin-bottom: 0px !important;border-collapse: collapse; border: 1px solid black; font-size: 8pt; font-family: 'MS Gothic', 'sans-serif'; table-layout: fixed;">
+
+                            <colgroup>
+                                <col style="width: 3%;" />
+                                <col style="width: 7%;" />
+                                <col style="width: 12%;" />
+                                <col style="width: 18%;" />
+                                <col style="width: 8%;" />
+                                <col style="width: 5%;" />
+                                <col style="width: 10%;" />
+                                <col style="width: 9%;" />
+                                <col style="width: 18.3%;" />
+                                <col style="width: 9.7%;" />
+                            </colgroup>
+
+                            <thead>
+                                <tr>
+                                    <th
+                                        style="text-align: left; border: 1px solid black; padding: 3px; vertical-align: middle; font-size: 9pt;">
+                                        NO
+                                    </th>
+                                    <th
+                                        style="text-align: left; border: 1px solid black; padding: 3px; vertical-align: middle; font-size: 9pt;">
+                                        受注区分
+                                    </th>
+                                    <th colspan="2"
+                                        style="text-align: left; border: 1px solid black; padding: 3px; vertical-align: middle; font-size: 9pt;">
+                                        商品CD/ 商品名 / 規格
+                                    </th>
+                                    <th
+                                        style="text-align: left; border: 1px solid black; padding: 3px; vertical-align: middle; font-size: 9pt;">
+                                        発注NO
+                                    </th>
+                                    <th
+                                        style="text-align: right; border: 1px solid black; padding: 3px; vertical-align: middle; font-size: 9pt;">
+                                        数量
+                                    </th>
+                                    <th
+                                        style="text-align: left; border: 1px solid black; padding: 3px; vertical-align: middle; font-size: 9pt;">
+                                        販売/仕入単価
+                                    </th>
+                                    <th
+                                        style="text-align: left; border: 1px solid black; padding: 3px; vertical-align: middle; font-size: 9pt;">
+                                        販売仕入金額
+                                    </th>
+                                    <th colspan="2"
+                                        style="text-align: left; border: 1px solid black; padding: 3px; vertical-align: middle; font-size: 9pt;">
+                                        仕入先名・担当部署・電話番号/出荷先名
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody style="line-height: 1.2;">
+
+                                <t t-set="faint_border_color" t-value="'#a4a4a4'" />
+                                <t t-set="faint_border_right_style"
+                                    t-value="'border-right: 1px solid ' + faint_border_color + '; box-sizing: border-box;'" />
+                                <t t-set="faint_border_bottom_style"
+                                    t-value="'border-bottom: 1px solid ' + faint_border_color + '; box-sizing: border-box;'" />
+
+                                <t t-set="td_base_style"
+                                    t-value="'border-left: 1px solid black; border-right: 1px solid black; padding: 3px; vertical-align: middle !important; background-color: white; height: 100%; box-sizing: border-box; word-break: break-all;'" />
+                                <t t-set="td_style" t-value="td_base_style" />
+                                <t t-set="td_style_right"
+                                    t-value="td_base_style + 'text-align: right;'" />
+                                <t t-set="td_style_center"
+                                    t-value="td_base_style + 'text-align: center;'" />
+                                <t t-set="td_style_left"
+                                    t-value="td_base_style + 'text-align: left;'" />
+
+                                <t t-set="td_top_style"
+                                    t-value="td_style + 'border-top: 1px solid black;'" />
+                                <t t-set="td_top_style_right"
+                                    t-value="td_style_right + 'border-top: 1px solid black;'" />
+                                <t t-set="td_top_style_left"
+                                    t-value="td_style_left + 'border-top: 1px solid black; vertical-align: top !important;'" />
+                                <t t-set="td_top_style_center"
+                                    t-value="td_style_center + 'border-top: 1px solid black; vertical-align: top !important;'" />
+
+
+                                <tr t-att-style="faint_border_bottom_style">
+                                    <td t-att-style="td_top_style_center" rowspan="2">001</td>
+                                    <td t-att-style="td_top_style_left + 'font-weight: bold;'"
+                                        rowspan="2">通常在庫</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">
+                                        cbxD0040ce</td>
+                                    <td t-att-style="td_top_style">Advanced Recorder STD 4ch Compact</td>
+                                    <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">757,000.00</td>
+                                    <td t-att-style="td_top_style_right">757,000</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">
+                                        &amp;nbsp;</td>
+                                    <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td t-att-style="td_style" colspan="2">D0B0040CE</td>
+                                    <td t-att-style="td_style">&amp;nbsp;</td>
+                                    <td t-att-style="td_style_right">1</td>
+                                    <td t-att-style="td_style_right">32,100.00</td>
+                                    <td t-att-style="td_style_right">32,100</td>
+                                    <td t-att-style="td_style + faint_border_right_style">株式会社
+                                        鈴木電気サービス</td>
+                                    <td t-att-style="td_style"></td>
+                                </tr>
+
+                                <tr t-att-style="faint_border_bottom_style">
+                                    <td t-att-style="td_top_style_center" rowspan="2">002</td>
+                                    <td t-att-style="td_top_style_left + 'font-weight: bold;'"
+                                        rowspan="2">通常在庫</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">
+                                        dx-bu231irc</td>
+                                    <td t-att-style="td_top_style">10.1インチ液晶モニター</td>
+                                    <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">0.00</td>
+                                    <td t-att-style="td_top_style_right">0</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">
+                                        &amp;nbsp;</td>
+                                    <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td t-att-style="td_style" colspan="2">LDA-110WM</td>
+                                    <td t-att-style="td_style">&amp;nbsp;</td>
+                                    <td t-att-style="td_style_right">1</td>
+                                    <td t-att-style="td_style_right">12,500.00</td>
+                                    <td t-att-style="td_style_right">12,500</td>
+                                    <td t-att-style="td_style + faint_border_right_style">株式会社
+                                        鈴木電気サービス</td>
+                                    <td t-att-style="td_style"></td>
+                                </tr>
+
+                                <tr t-att-style="faint_border_bottom_style">
+                                    <td t-att-style="td_top_style_center" rowspan="2">003</td>
+                                    <td t-att-style="td_top_style_left + 'font-weight: bold;'"
+                                        rowspan="2">通常在庫</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">
+                                        hiAlert(クラウド)Ver.8</td>
+                                    <td t-att-style="td_top_style">AI Alert(通報装置)Ver.8 【PING/PoE】</td>
+                                    <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">0.00</td>
+                                    <td t-att-style="td_top_style_right">0</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">
+                                        &amp;nbsp;</td>
+                                    <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td t-att-style="td_style" colspan="2">AA2/AA3兼用(クラウド)
+                                        Ver.8 【PING/PoE】</td>
+                                    <td t-att-style="td_style">&amp;nbsp;</td>
+                                    <td t-att-style="td_style_right">1</td>
+                                    <td t-att-style="td_style_right">0.00</td>
+                                    <td t-att-style="td_style_right">0</td>
+                                    <td t-att-style="td_style + faint_border_right_style">株式会社
+                                        鈴木電気サービス</td>
+                                    <td t-att-style="td_style"></td>
+                                </tr>
+
+                                <tr t-att-style="faint_border_bottom_style">
+                                    <td t-att-style="td_top_style_center" rowspan="2">004</td>
+                                    <td t-att-style="td_top_style_left + 'font-weight: bold;'"
+                                        rowspan="2">通常在庫</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">
+                                        dx-bu231irc</td>
+                                    <td t-att-style="td_top_style">小型 IR Bullet Camera</td>
+                                    <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">0.00</td>
+                                    <td t-att-style="td_top_style_right">0</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">
+                                        &amp;nbsp;</td>
+                                    <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td t-att-style="td_style" colspan="2">
+                                        DX-BU223IRC</td>
+                                    <td t-att-style="td_style">&amp;nbsp;</td>
+                                    <td t-att-style="td_style_right">4</td>
+                                    <td t-att-style="td_style_right">7,800.00</td>
+                                    <td t-att-style="td_style_right">31,200</td>
+                                    <td t-att-style="td_style + faint_border_right_style">株式会社
+                                        鈴木電気サービス</td>
+                                    <td t-att-style="td_style"></td>
+                                </tr>
+
+                                <tr t-att-style="faint_border_bottom_style">
+                                    <td t-att-style="td_top_style_center" rowspan="2">005</td>
+                                    <td t-att-style="td_top_style_left + 'font-weight: bold;'"
+                                        rowspan="2">通常在庫</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">
+                                        hi120100-u010jp</td>
+                                    <td t-att-style="td_top_style">スイッチングACアダプター 12V/1A</td>
+                                    <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">0.00</td>
+                                    <td t-att-style="td_top_style_right">0</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">
+                                        &amp;nbsp;</td>
+                                    <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td t-att-style="td_style" colspan="2">
+                                        HI120100-U010JP</td>
+                                    <td t-att-style="td_style">&amp;nbsp;</td>
+                                    <td t-att-style="td_style_right">4</td>
+                                    <td t-att-style="td_style_right">700.00</td>
+                                    <td t-att-style="td_style_right">2.800</td>
+                                    <td t-att-style="td_style + faint_border_right_style">株式会社
+                                        鈴木電気サービス</td>
+                                    <td t-att-style="td_style"></td>
+                                </tr>
+
+                                <tr t-att-style="faint_border_bottom_style">
+                                    <td t-att-style="td_top_style_center" rowspan="2">006</td>
+                                    <td t-att-style="td_top_style_left + 'font-weight: bold;'"
+                                        rowspan="2">受注発注</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">
+                                        ta20-55sp</td>
+                                    <td t-att-style="td_top_style">日除け用内愉</td>
+                                    <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">0.00</td>
+                                    <td t-att-style="td_top_style_right">0</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">株式会社
+                                        鈴木電気サービス</td>
+                                    <td t-att-style="td_top_style">0463-21-1139</td>
+                                </tr>
+                                <tr>
+                                    <td t-att-style="td_style" colspan="2">TA20-55SP</td>
+                                    <td t-att-style="td_style">810000397397</td>
+                                    <td t-att-style="td_style_right">1</td>
+                                    <td t-att-style="td_style_right">29,800.00</td>
+                                    <td t-att-style="td_style_right">29,800</td>
+                                    <td t-att-style="td_style + faint_border_right_style">株式会社
+                                        鈴木電気サービス</td>
+                                    <td t-att-style="td_style"></td>
+                                </tr>
+
+                                <tr t-att-style="faint_border_bottom_style">
+                                    <td t-att-style="td_top_style_center" rowspan="2">007</td>
+                                    <td t-att-style="td_top_style_left + 'font-weight: bold;'"
+                                        rowspan="2">他-原価有</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">zコピー</td>
+                                    <td t-att-style="td_top_style">工事費(グリース,R.W/鈴木電気サービス)</td>
+                                    <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">&amp;nbsp;</td>
+                                    <td t-att-style="td_top_style_right">0.00</td>
+                                    <td t-att-style="td_top_style_right">0</td>
+                                    <td t-att-style="td_top_style + faint_border_right_style">株式会社
+                                        鈴木電気サービス</td>
+                                    <td t-att-style="td_top_style">028-243-0050</td>
+                                </tr>
+                                <tr>
+                                    <td t-att-style="td_style" colspan="2">工事費以外には使用しないでください</td>
+                                    <td t-att-style="td_style">810000397398</td>
+                                    <td t-att-style="td_style_right">1</td>
+                                    <td t-att-style="td_style_right">120,000.00</td>
+                                    <td t-att-style="td_style_right">120,000</td>
+                                    <td t-att-style="td_style + faint_border_right_style">宇都宮支店</td>
+                                    <td t-att-style="td_style"></td>
+                                </tr>
+
+                                <t t-foreach="range(8, 16)" t-as="i">
+                                    <tr t-att-style="faint_border_bottom_style">
+                                        <td t-att-style="td_top_style_center" rowspan="2">
+                                            <t t-esc="'%03d' % i" />
+                                        </td>
+                                        <td t-att-style="td_top_style_left" rowspan="2"></td>
+                                        <td t-att-style="td_top_style + faint_border_right_style">
+                                            &amp;nbsp;</td>
+                                        <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                        <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                        <td t-att-style="td_top_style_right">&amp;nbsp;</td>
+                                        <td t-att-style="td_top_style_right">&amp;nbsp;</td>
+                                        <td t-att-style="td_top_style_right">&amp;nbsp;</td>
+                                        <td t-att-style="td_top_style + faint_border_right_style">
+                                            &amp;nbsp;</td>
+                                        <td t-att-style="td_top_style">&amp;nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td t-att-style="td_style" colspan="2">
+                                            &amp;nbsp;</td>
+                                        <td t-att-style="td_style">&amp;nbsp;</td>
+                                        <td t-att-style="td_style_right">&amp;nbsp;</td>
+                                        <td t-att-style="td_style_right">&amp;nbsp;</td>
+                                        <td t-att-style="td_style_right">&amp;nbsp;</td>
+                                        <td t-att-style="td_style + faint_border_right_style">
+                                            &amp;nbsp;</td>
+                                        <td t-att-style="td_style">&amp;nbsp;</td>
+                                    </tr>
+                                </t>
+
+                            </tbody>
+                        </table>
+
+                        <div style="width: 100%;">
+                            <div style="float: left; width: 28%;">
+                                <table
+                                    style="width: 100%; border-collapse: collapse; border: 1px solid black; font-size: 8pt; border-top: none;">
+                                    <tr style="border: 1px solid black; border-top: none;">
+                                        <td
+                                            style="border: 1px solid black; padding: 2px; border-top: none;">
+                                            伝票備考：注文書番号：55065-N05-01-01
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div style="float: right; width: 68%;margin-right: 15px;">
+                                <table
+                                    style="width: 100%; border-collapse: collapse; border: 1px solid black; font-size: 8pt; border-top: none;">
+                                    <tr style="border: 1px solid black; border-top: none;">
+                                        <td
+                                            style="border: 1px solid black; padding: 2px; width: 6%; text-align: left; border-right: none; border-top: none;">
+                                            売上合計</td>
+                                        <td
+                                            style="border: 1px solid black; padding: 2px; width: 6%; text-align: right; border-left: none; border-top: none;">
+                                            719,150</td>
+                                        <td
+                                            style="border: 1px solid black; padding: 2px; width: 6%; text-align: left; border-right: none; border-top: none;">
+                                            保守前受</td>
+                                        <td
+                                            style="border: 1px solid black; padding: 2px; width: 6%; text-align: right; border-left: none; border-top: none;">
+                                            37,850</td>
+                                        <td
+                                            style="border: 1px solid black; padding: 2px; width: 9%; text-align: left; border-right: none; border-top: none;">
+                                            概算原価計</td>
+                                        <td
+                                            style="border: 1px solid black; padding: 2px; width: 6%; text-align: right; border-left: none; border-top: none;">
+                                            228,400</td>
+                                        <td
+                                            style="border: 1px solid black; padding: 2px; width: 6%; text-align: left; border-right: none; border-top: none;">
+                                            粗利額</td>
+                                        <td
+                                            style="border: 1px solid black; padding: 2px; width: 6%; text-align: right; border-left: none; border-top: none;">
+                                            528,600</td>
+                                        <td
+                                            style="border: 1px solid black; padding: 2px; width: 6%; text-align: left; border-right: none; border-top: none;">
+                                            粗利率</td>
+                                        <td
+                                            style="border: 1px solid black; padding: 2px; width: 6%; text-align: right; border-left: none; border-top: none;">
+                                            89.89%</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>
