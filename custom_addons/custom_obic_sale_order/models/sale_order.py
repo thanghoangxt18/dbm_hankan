@@ -6,11 +6,8 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class ObicOrder(models.Model):
-    _name = 'obic.order'
-    _description = 'OBIC Order Management (受注管理)'
-    _order = 'order_date desc, id desc'
-    _rec_name = 'order_number'
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
 
     # Mode control (照会 dropdown)
     view_mode = fields.Selection([
@@ -22,7 +19,6 @@ class ObicOrder(models.Model):
     order_number = fields.Char(
         string='受注番号',
         size=20,
-        required=True,
         copy=False,
         index=True,
         help='Order number (受注番号)'
@@ -44,7 +40,6 @@ class ObicOrder(models.Model):
     
     base_date = fields.Date(
         string='基準日',
-        # compute='_compute_base_date',
         help='Current date display (基準日)'
     )
     
@@ -109,7 +104,6 @@ class ObicOrder(models.Model):
     order_date = fields.Date(
         string='受注日',
         default=fields.Date.context_today,
-        required=True,
         help='Order date (受注日)'
     )
     
@@ -133,13 +127,17 @@ class ObicOrder(models.Model):
         size=20,
         help='Introduction category (導入区分)'
     )
+    
+    partner_id = fields.Many2one(
+      string='得意先',
+    )
 
     # Customer and related parties
-    customer_code = fields.Char(
-        string='得意先',
-        size=20,
-        help='Customer code (得意先)'
-    )
+    # customer_code = fields.Char(
+    #     string='得意先',
+    #     size=20,
+    #     help='Customer code (得意先)'
+    # )
     
     person_in_charge = fields.Char(
         string='担当者',
@@ -187,7 +185,6 @@ class ObicOrder(models.Model):
     point_back = fields.Char(string='ポイントバック')
     rental_monthly_amount = fields.Float(string='レンタル月額', digits=(16, 2))
     
-    # Thay thế rental_period bằng 2 fields riêng biệt
     rental_start_date = fields.Date(string='レンタル開始日')
     rental_end_date = fields.Date(string='レンタル終了日')
     
@@ -248,6 +245,7 @@ class ObicOrder(models.Model):
         store=False,
         help='Number of detail patterns (明細パターン数)'
     )    
+    
     project_code = fields.Char(
         string='プロジェクト',
         size=20,
@@ -310,35 +308,6 @@ class ObicOrder(models.Model):
     )
 
     # Rental and lease
-    rental_monthly_amount = fields.Float(
-        string='レンタル月額',
-        digits=(12, 2),
-        help='Rental monthly amount (レンタル月額)'
-    )
-    
-    # rental_period = fields.Char(
-    #     string='レンタル期間',
-    #     size=100,
-    #     help='Rental period in format yyyy/MM/dd - yyyy/MM/dd (レンタル期間)'
-    # )
-    
-    rental_start_date = fields.Date(
-        string='レンタル開始日',
-        help='Rental start date (レンタル開始日)'
-    )
-    
-    rental_end_date = fields.Date(
-        string='レンタル終了日',
-        help='Rental end date (レンタル終了日)'
-    )
-    
-    rental_months = fields.Integer(
-        string='レンタル月数',
-        compute='_compute_rental_months',
-        store=True,
-        help='Calculated rental months (レンタル月数)'
-    )
-    
     lease_cancellation_fee = fields.Float(
         string='リース解約金(税込)',
         digits=(12, 2),
@@ -355,15 +324,6 @@ class ObicOrder(models.Model):
         string='件名',
         size=30,
         help='Subject/Title (件名)'
-    )
-
-    # Order Lines (明細)
-    order_line_ids = fields.One2many(
-        'obic.order.line',
-        'order_id',
-        string='受注明細',
-        copy=True,
-        help='Order lines (受注明細)'
     )
 
     # Order Totals - Sales Section (税抜売上)
@@ -445,16 +405,16 @@ class ObicOrder(models.Model):
         help='Maintenance advance tax = 10% × 保守前受'
     )
 
-    @api.depends('order_line_ids.sales_amount', 'order_line_ids.sales_tax', 
-                 'order_line_ids.cost_amount', 'order_line_ids.gross_profit')
+    @api.depends('order_line.obic_sales_amount', 'order_line.obic_sales_tax', 
+                 'order_line.obic_cost_amount', 'order_line.obic_gross_profit')
     def _compute_order_totals(self):
         """Calculate order totals from lines"""
         for order in self:
-            order.total_sales_before_tax = sum(order.order_line_ids.mapped('sales_amount'))
-            order.total_sales_tax = sum(order.order_line_ids.mapped('sales_tax'))
+            order.total_sales_before_tax = sum(order.order_line.mapped('obic_sales_amount'))
+            order.total_sales_tax = sum(order.order_line.mapped('obic_sales_tax'))
             order.total_sales_with_tax = order.total_sales_before_tax + order.total_sales_tax
-            order.total_cost_amount = sum(order.order_line_ids.mapped('cost_amount'))
-            order.total_gross_profit = sum(order.order_line_ids.mapped('gross_profit'))
+            order.total_cost_amount = sum(order.order_line.mapped('obic_cost_amount'))
+            order.total_gross_profit = sum(order.order_line.mapped('obic_gross_profit'))
 
     @api.depends('maintenance_advance')
     def _compute_maintenance_tax(self):
@@ -483,11 +443,9 @@ class ObicOrder(models.Model):
                 if record.rental_end_date < record.rental_start_date:
                     record.rental_months = 0
                 else:
-                    # 月数の差分を計算
                     start = record.rental_start_date
                     end = record.rental_end_date
                     months = (end.year - start.year) * 12 + (end.month - start.month)
-                    # 日付を考慮して月数を調整
                     if end.day >= start.day:
                         months += 1
                     record.rental_months = months
@@ -589,7 +547,6 @@ class ObicOrder(models.Model):
         """登録 - Đăng ký (Save)"""
         self.ensure_one()
         try:
-            # Logic save sẽ bổ sung sau
             return {
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
@@ -601,7 +558,7 @@ class ObicOrder(models.Model):
                 }
             }
         except Exception as e:
-            _logger.error('debug Error in action_register: %s', str(e))
+            _logger.error('Error in action_register: %s', str(e))
             return {
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
@@ -639,12 +596,6 @@ class ObicOrder(models.Model):
             }
         }
 
-    # Xóa các action methods cũ không còn dùng
-    # action_order_category, action_format, action_order_list, 
-    # action_warehouse, action_shipping_list, action_shipping_order,
-    # action_disable_confirmation đã bị xóa
-
-    # Existing action methods for detail buttons
     def action_show_customer_detail(self):
         """Show customer detail modal (placeholder)"""
         return {
@@ -683,6 +634,7 @@ class ObicOrder(models.Model):
                 'sticky': False,
             }
         }
+    
     def action_show_related_partners(self):     
         """Show related partners modal (placeholder)"""
         return {
@@ -773,3 +725,16 @@ class ObicOrder(models.Model):
                 'sticky': False,
             }
         }
+        
+    def action_preview_new_template(self):
+          """Mở template PDF mới khi nhấn vào button Preview New"""
+          self.ensure_one()
+          # Use a public controller URL to render/download the PDF so we don't depend on the report external id
+          custom_preview_url = f'/my/orders/{self.id}/download_new_template'
+          if self.access_token:
+              custom_preview_url += f'?access_token={self.access_token}'
+          return {
+              'type': 'ir.actions.act_url', 
+              'target': 'self',
+              'url': custom_preview_url,
+          }

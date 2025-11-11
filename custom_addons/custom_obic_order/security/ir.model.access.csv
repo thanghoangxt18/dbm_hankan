@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_obic_order_user,obic.order.user,model_obic_order,base.group_user,1,1,1,1
-access_obic_order_manager,obic.order.manager,model_obic_order,sales_team.group_sale_manager,1,1,1,1
-access_obic_order_line_user,obic.order.line.user,model_obic_order_line,base.group_user,1,1,1,1
-access_obic_order_line_manager,obic.order.line.manager,model_obic_order_line,sales_team.group_sale_manager,1,1,1,1

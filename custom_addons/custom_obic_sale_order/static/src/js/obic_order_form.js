@@ -26,7 +26,7 @@ class ObicOrderFormController extends FormController {
   }
 }
 
-registry.category("views").add("obic_order_form", {
+registry.category("views").add("obic_sale_order_form", {
   ...formView,
   Controller: ObicOrderFormController,
 });
