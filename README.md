@@ -35,3 +35,24 @@ Developers can start with [the developer tutorials](https://www.odoo.com/documen
 
 If you believe you have found a security issue, check our [Responsible Disclosure page](https://www.odoo.com/security-report)
 for details and get in touch with us via email.
+--------------------------------------------------------------------
+docker command:
+
+docker compose up -d
+---------------------------------------------------------------------
+docker-compose up -d --build 
+Nếu bạn có thay đổi trong Dockerfile hoặc các tệp mà Dockerfile sử dụng, 
+bạn nên thêm cờ --build để buộc Docker Compose build lại image trước khi 
+khởi động container.
+---------------------------------------------------------------------
+＊Install module.
+docker compose exec web python3 odoo-bin -c /etc/odoo/odoo.conf -i {moduleName} -d {dbName} --db_host=db --db_user=odoo --db_password=myodoo --stop-after-init
+
+＊Reset module.
+docker compose exec web python3 odoo-bin -c /etc/odoo/odoo.conf -u {moduleName} -d {dbName} --db_host=db --db_user=odoo --db_password=myodoo --stop-after-init
+---------------------------------------------------------------------
+＊Reset app (Mỗi lần cần upgrade reset lại app)
+docker compose restart web
+---------------------------------------------------------------------
+＊View Log.
+docker compose logs -f web

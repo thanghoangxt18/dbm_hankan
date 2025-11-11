@@ -1,0 +1,47 @@
+services:
+  web:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./logs:/var/log/odoo
+      - .:/usr/src/odoo
+      - ./addons:/usr/lib/python3/dist-packages/odoo/addons
+      - ./config/odoo.conf:/etc/odoo/odoo.conf:ro
+    restart: unless-stopped
+    environment:
+      # Database connection (backup env vars)
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=myodoo
+      - POSTGRES_DB=postgres
+    # Simple command using config file
+    command: >
+      python3 odoo-bin -c /etc/odoo/odoo.conf 
+      --log-level=info
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=myodoo
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    # PostgreSQL optimization for development
+    command: >
+      postgres
+      -c max_connections=200
+      -c shared_buffers=256MB
+      -c effective_cache_size=1GB
+      -c work_mem=4MB
+
+volumes:
+  odoo-web-data:
+  odoo-db-data:
