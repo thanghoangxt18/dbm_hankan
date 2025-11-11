@@ -1,0 +1,745 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- OBIC Order Form View with Complex Layout -->
+  <record id="view_obic_order_form" model="ir.ui.view">
+    <field name="name">obic.order.form</field>
+    <field name="model">obic.order</field>
+    <field name="arch" type="xml">
+      <form string="受注入力" class="obic_order_form">
+        <!-- Header Action Buttons -->
+        <header>
+          <button name="action_new_line" string="行新規" type="object" class="oe_highlight" />
+          <button name="action_delete_line" string="行削除" type="object" />
+          <button name="action_search" string="検索" type="object" />
+          <button name="action_cancel" string="取消" type="object" />
+          <button name="action_edit_line" string="行編集" type="object" />
+          <button name="action_copy_line" string="行複写" type="object" />
+          <button name="action_register" string="登録" type="object" class="oe_highlight" />
+          <button name="action_content_confirmation" string="內容確認" type="object" />
+          <button name="action_close" string="閉じる" type="object" />
+        </header>
+
+        <sheet>
+          <!-- Complex multi-column layout matching the image -->
+          <div class="obic_order_container">
+            <div class="row">
+              <div class="col-1">
+                <field name="view_mode" widget="selection" nolabel="1" class="obic_mode_select" />
+              </div>
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="order_number" class="flex-shrink-0 me-2 mb-5px">
+                    受注番号</label>
+                  <field name="order_number" placeholder="受注番号" required="1" nolabel="1"
+                    class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="quotation_number" class="flex-shrink-0 me-2 mb-5px">
+                    見積番号</label>
+                  <field name="quotation_number" placeholder="見積番号" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-5"></div>
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="base_date" string="基準日" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="base_date" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-1"></div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="source_order_number" class="flex-shrink-0 me-2 mb-5px">
+                    複写元受注番号</label>
+                  <field name="source_order_number" placeholder="複写元受注番号" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-6"></div>
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="previous_input_number" class="flex-shrink-0 me-2 mb-5px">
+                    前回入力番号</label>
+                  <field name="previous_input_number" placeholder="前回入力番号" class="flex-grow-1" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="business_office" string="事業所" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="business_office" placeholder="事業所" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="business_category" string="業務区分" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="business_category" placeholder="業務区分" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="order_category" string="受注区分" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="order_category" placeholder="受注区分" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="obic_checkbox_item">
+                  <field name="ship_after_payment" nolabel="1" />
+                  <label for="ship_after_payment" string="入金後出荷" class="flex-grow-1" />
+                </div>
+                <div class="obic_checkbox_item">
+                  <field name="ship_by_voucher" nolabel="1" />
+                  <label for="ship_by_voucher" string="伝票単位出荷" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="project_code" string="プロジェクト" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="project_code" placeholder="プロジェクト" class="w-100" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="obic_checkbox_item">
+                  <field name="order_confirmation_not_required" nolabel="1" />
+                  <label for="order_confirmation_not_required" string="受注確認書不要" />
+                </div>
+                <div class="obic_checkbox_item">
+                  <field name="order_confirmation_immediate" nolabel="1" />
+                  <label for="order_confirmation_immediate" string="受注確認書即伝" />
+                </div>
+                <div class="obic_checkbox_item">
+                  <field name="purchase_order_immediate" nolabel="1" />
+                  <label for="purchase_order_immediate" string="発注書即伝発行" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="order_date" string="受注日" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="order_date" class="flex-grow-1" placeholder="受注日" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="shipping_date" string="出荷日" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="shipping_date" class="flex-grow-1" placeholder="出荷日" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="delivery_deadline" string="受注納期" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="delivery_deadline" class="flex-grow-1" placeholder="受注納期" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="sales_scheduled_date" string="売上予定日" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="sales_scheduled_date" class="flex-grow-1" placeholder="売上予定日" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="introduction_category" string="導入区分" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="introduction_category" placeholder="導入区分" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-2"> </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="customer_code" string="得意先" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="customer_code" placeholder="得意先" class="flex-grow-1" />
+                  <button name="action_show_customer_detail" string="詳細" type="object"
+                    class="btn-secondary obic_detail_btn ms-2 flex-shrink-0" />
+                </div>
+              </div>
+              <div class="col-1"></div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="billing_destination" string="請求先" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="billing_destination" placeholder="請求先"
+                    class="obic_field_inline flex-grow-1" />
+                  <button name="action_show_billing_information" string="請求情報" type="object"
+                    class="btn-secondary obic_detail_btn ms-2 flex-shrink-0" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="person_in_charge" string="担当者" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="person_in_charge" placeholder="担当者" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="department_in_charge" string="担当部門" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="department_in_charge" placeholder="担当部門" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="account_category_1" string="帳端区分" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="account_category_1" placeholder="帳端区分" class="flex-grow-1" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="delivery_destination" string="納入先" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="delivery_destination" placeholder="納入先" class="flex-grow-1" />
+                  <button name="action_show_delivery_detail" string="詳細" type="object"
+                    class="btn-secondary obic_detail_btn ms-2 flex-shrink-0" />
+                </div>
+              </div>
+              <div class="col-5">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="secondary_delivery_destination" string="2次納入先"
+                    class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="secondary_delivery_destination" placeholder="2次納入先"
+                    class="flex-grow-1" />
+                  <button name="action_show_secondary_delivery_detail" string="詳細" type="object"
+                    class="btn-secondary obic_detail_btn ms-2 flex-shrink-0" />
+                  <button name="action_show_related_partners" string="関連取引先" type="object"
+                    class="btn-secondary obic_detail_btn ms-2 flex-shrink-0" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="supplier_code" string="仕入先" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="supplier_code" placeholder="仕入先" class="flex-grow-1" />
+                  <button name="action_show_supplier_detail" string="詳細" type="object"
+                    class="btn-secondary obic_detail_btn ms-2 flex-shrink-0" />
+                </div>
+              </div>
+              <div class="col-5">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="payment_destination" string="支払先" />
+                  <field name="payment_destination"
+                    placeholder="支払先" class="flex-grow-1" />
+                  <button name="action_show_payment_info"
+                    string="支払情報" type="object"
+                    class="btn-secondary obic_detail_btn ms-2 flex-shrink-0" />
+                  <span class="ms-1">支払体積</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="warehouse_code" string="倉庫" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="warehouse_code" placeholder="倉庫" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="customer_main_number" string="得意先主文番号"
+                    class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="customer_main_number" placeholder="得意先主文番号" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="project_number" string="案件番号" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="project_number" placeholder="案件番号" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="account_category_2" string="帳端区分" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="account_category_2" placeholder="帳端区分" class="flex-grow-1" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="maintenance_advance_category" string="保守前受区分"
+                    class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="maintenance_advance_category" placeholder="保守前受区分"
+                    class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="maintenance_advance_detail" string="保守前受詳細"
+                    class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="maintenance_advance_detail" placeholder="保守前受詳細" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="advance_department" string="前受計上部門" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="advance_department" placeholder="前受計上部門" class="flex-grow-1" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="point_back" string="ポイントバック" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="point_back" placeholder="ポイントバック" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="rental_monthly_amount" string="レンタル月額"
+                    class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="rental_monthly_amount" placeholder="0.00" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="rental_start_date" string="レンタル期間" class="flex-shrink-0 me-2 mb-5px" />
+                  <div class="obic_field_with_text d-flex align-items-center w-100">
+                    <field name="rental_start_date" placeholder="開始日" nolabel="1"
+                      class="flex-grow-1" />
+                    <span class="mx-2">～</span>
+                    <field name="rental_end_date" placeholder="終了日" nolabel="1" class="flex-grow-1" />
+                    <span class="ms-3"> レンタル期間 <field name="rental_months" readonly="1" nolabel="1"
+                        force_save="1" />ヶ月 </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="lease_cancellation_destination" string="リース解約先"
+                    class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="lease_cancellation_destination" placeholder="リース解約先"
+                    class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="lease_cancellation_fee" string="リース解約金(税込)"
+                    class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="lease_cancellation_fee" placeholder="0.00" class="flex-grow-1" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="voucher_remark_1" string="伝票摘要①" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="voucher_remark_1" placeholder="伝票摘要①" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="product_major_category" string="品種大分類"
+                    class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="product_major_category" placeholder="品種大分類" class="flex-grow-1" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="voucher_remark_2" string="伝票摘要②" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="voucher_remark_2" placeholder="伝票摘要②" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="subject" string="件名" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="subject" placeholder="件名" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <button name="action_show_contract_detail" string="契約詳細" type="object"
+                  class="btn-secondary obic_detail_btn" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="lease_contract_number" string="リース契約番号"
+                    class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="lease_contract_number" placeholder="リース契約番号" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="quantity" string="台数" class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="quantity" readonly="1" class="flex-grow-1" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="transaction_approval_number" string="取引承認No."
+                    class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="transaction_approval_number" class="flex-grow-1" />
+                  <button name="action_show_analysis" string="分析集計" type="object"
+                    class="btn-secondary obic_detail_btn flex-shrink-0 ms-3" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="detail_pattern" string="明細パターン"
+                    class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="detail_pattern" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="number_of_detail_patterns" string="明細パターン数"
+                    class="flex-shrink-0 me-2 mb-5px" />
+                  <field name="number_of_detail_patterns" class="flex-grow-1" />
+                </div>
+              </div>
+              <div class="col-3">
+                <button name="action_reacquire_unit_price" string="単価再取得" type="object"
+                  class="btn-secondary obic_detail_btn flex-shrink-0 ms-3" />
+              </div>
+            </div>
+
+            <hr />
+
+            <!-- Order Lines Section (明細) -->
+            <div class="obic_order_lines_section mt-2">
+              <!-- <h3 class="mb-3">受注明細</h3> -->
+              <field name="order_line_ids" nolabel="1">
+                <list editable="bottom" string="受注明細">
+                  <field name="sequence" widget="handle" />
+
+                  <!-- Row 1 fields -->
+                  <field name="order_category" optional="show" />
+                  <field name="product_id" optional="show"
+                    options="{'no_create': True, 'no_create_edit': True}" />
+                  <field name="is_tax_excluded" widget="boolean_toggle" optional="show" />
+                  <field name="specification" optional="show" />
+
+                  <!-- Row 2 fields -->
+                  <field name="quantity" optional="show" />
+                  <field name="list_unit_price" optional="show" />
+                  <field name="discount_rate" optional="show"
+                    widget="percentage" />
+                  <field name="sales_unit_price" optional="show" />
+                  <field name="sales_amount" optional="show" sum="税抜売上" />
+                  <field name="sales_tax" optional="show" sum="消費税" />
+
+                  <!-- Row 3 fields -->
+                  <field name="purchase_temp_unit_price" optional="hide" />
+                  <field name="purchase_temp_amount" optional="hide" />
+                  <field name="warehouse_code" optional="hide" />
+                  <field name="cost_amount" optional="show" sum="原価金額" />
+                  <field name="gross_profit" optional="show" sum="粗利" />
+
+                  <!-- Row 4 fields -->
+                  <field name="shipping_destination" optional="hide" />
+                  <field name="inventory_warehouse" optional="hide" />
+                  <field name="line_remark" optional="hide" />
+                </list>
+
+                <!-- Custom Form View for Order Lines -->
+                <form string="受注明細">
+                  <sheet>
+                    <div class="container-fluid">
+                      <!-- Row 1 -->
+                      <div class="row mb-2">
+                        <div class="col-3">
+                          <label for="order_category" string="受注区分" />
+                          <field name="order_category" placeholder="受注区分" />
+                        </div>
+                        <div class="col-3">
+                          <label for="product_id" string="商品" />
+                          <field name="product_id"
+                            options="{'no_create': True, 'no_create_edit': True}" />
+                        </div>
+                        <div class="col-2">
+                          <label for="is_tax_excluded" string="外税" />
+                          <field name="is_tax_excluded" widget="boolean_toggle" />
+                        </div>
+                        <div class="col-4">
+                          <label for="specification" string="規格" />
+                          <field name="specification" placeholder="規格" />
+                        </div>
+                      </div>
+
+                      <!-- Row 2 -->
+                      <div class="row mb-2">
+                        <div class="col-2">
+                          <label for="quantity" string="総数" />
+                          <field name="quantity" />
+                        </div>
+                        <div class="col-2">
+                          <label for="list_unit_price" string="上代単価" />
+                          <field name="list_unit_price" />
+                        </div>
+                        <div class="col-2">
+                          <label for="discount_rate" string="掛率" />
+                          <div class="d-flex align-items-center">
+                            <field name="discount_rate" class="flex-grow-1" />
+                            <span class="ms-1">%</span>
+                          </div>
+                        </div>
+                        <div class="col-2">
+                          <label for="sales_unit_price" string="売上単価" />
+                          <field name="sales_unit_price" />
+                        </div>
+                        <div class="col-2">
+                          <label for="sales_amount" string="売上金額" />
+                          <field name="sales_amount" readonly="1"
+                            force_save="1" />
+                        </div>
+                        <div class="col-2">
+                          <label for="sales_tax" string="売上消費税" />
+                          <field name="sales_tax" readonly="1"
+                            force_save="1" />
+                        </div>
+                      </div>
+
+                      <!-- Row 3 -->
+                      <div class="row mb-2">
+                        <div class="col-2">
+                          <label for="purchase_temp_unit_price" string="発注仮単価" />
+                          <field name="purchase_temp_unit_price" />
+                        </div>
+                        <div class="col-2">
+                          <label for="purchase_temp_amount" string="発注仮金額" />
+                          <field name="purchase_temp_amount" />
+                        </div>
+                        <div class="col-2">
+                          <label for="warehouse_code" string="倉庫" />
+                          <field name="warehouse_code" placeholder="倉庫" />
+                        </div>
+                        <div class="col-2">
+                          <label for="cost_amount" string="原価金額" />
+                          <field name="cost_amount" />
+                        </div>
+                        <div class="col-2">
+                          <label for="gross_profit" string="粗利" />
+                          <field name="gross_profit" readonly="1"
+                            force_save="1" />
+                        </div>
+                      </div>
+
+                      <!-- Row 4 -->
+                      <div class="row mb-2">
+                        <div class="col-3">
+                          <label for="shipping_destination" string="出荷先" />
+                          <field name="shipping_destination" placeholder="出荷先" />
+                        </div>
+                        <div class="col-3">
+                          <label for="inventory_warehouse" string="在庫管理倉庫" />
+                          <field name="inventory_warehouse" placeholder="在庫管理倉庫" />
+                        </div>
+                        <div class="col-6">
+                          <label for="line_remark" string="明細摘要" />
+                          <field name="line_remark" placeholder="明細摘要" />
+                        </div>
+                      </div>
+                    </div>
+                  </sheet>
+                </form>
+              </field>
+            </div>
+
+            <!-- Order Totals Section -->
+            <div class="obic_order_totals_section mt-4">
+              <div class="container-fluid">
+                <div class="row">
+                  <!-- Left Column: Sales Totals -->
+                  <div class="col-4">
+                    <div class="obic_totals_box p-3 bg-light border rounded">
+                      <h5 class="mb-3">売上合計</h5>
+                      <div class="row mb-2">
+                        <div class="col-6">
+                          <label for="total_sales_before_tax" class="fw-bold">税抜売上</label>
+                        </div>
+                        <div class="col-6 text-end">
+                          <field name="total_sales_before_tax" readonly="1"
+                            nolabel="1" class="obic_total_amount" />
+                        </div>
+                      </div>
+                      <div class="row mb-2">
+                        <div class="col-6">
+                          <label for="total_sales_tax" class="fw-bold">消費税</label>
+                        </div>
+                        <div class="col-6 text-end">
+                          <field name="total_sales_tax" readonly="1"
+                            nolabel="1" class="obic_total_amount" />
+                        </div>
+                      </div>
+                      <div class="row border-top pt-2">
+                        <div class="col-6">
+                          <label for="total_sales_with_tax" class="fw-bold">合計</label>
+                        </div>
+                        <div class="col-6 text-end">
+                          <field name="total_sales_with_tax" readonly="1"
+                            nolabel="1" class="obic_total_amount fw-bold" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Middle Column: Purchase Totals (TBD) -->
+                  <div class="col-4">
+                    <div class="obic_totals_box p-3 bg-light border rounded">
+                      <h5 class="mb-3">仕入合計</h5>
+                      <div class="row mb-2">
+                        <div class="col-6">
+                          <label for="total_purchase_before_tax" class="fw-bold">税抜仕入</label>
+                        </div>
+                        <div class="col-6 text-end">
+                          <field name="total_purchase_before_tax" readonly="1"
+                            nolabel="1" class="obic_total_amount" />
+                        </div>
+                      </div>
+                      <div class="row mb-2">
+                        <div class="col-6">
+                          <label for="total_purchase_tax" class="fw-bold">消費税</label>
+                        </div>
+                        <div class="col-6 text-end">
+                          <field name="total_purchase_tax" readonly="1"
+                            nolabel="1" class="obic_total_amount" />
+                        </div>
+                      </div>
+                      <div class="row border-top pt-2">
+                        <div class="col-6">
+                          <label for="total_purchase_with_tax" class="fw-bold">合計</label>
+                        </div>
+                        <div class="col-6 text-end">
+                          <field name="total_purchase_with_tax" readonly="1"
+                            nolabel="1" class="obic_total_amount fw-bold" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Right Column: Cost and Profit -->
+                  <div class="col-4">
+                    <div class="obic_totals_box p-3 bg-light border rounded">
+                      <h5 class="mb-3">原価・粗利</h5>
+                      <div class="row mb-2">
+                        <div class="col-6">
+                          <label for="total_cost_amount" class="fw-bold">原価金額</label>
+                        </div>
+                        <div class="col-6 text-end">
+                          <field name="total_cost_amount" readonly="1"
+                            nolabel="1" class="obic_total_amount" />
+                        </div>
+                      </div>
+                      <div class="row mb-2">
+                        <div class="col-6">
+                          <label for="total_gross_profit" class="fw-bold">粗利</label>
+                        </div>
+                        <div class="col-6 text-end">
+                          <field name="total_gross_profit" readonly="1"
+                            nolabel="1" class="obic_total_amount" />
+                        </div>
+                      </div>
+                      <div class="row mb-2">
+                        <div class="col-6">
+                          <label for="maintenance_advance" class="fw-bold">保守前受</label>
+                        </div>
+                        <div class="col-6 text-end">
+                          <field name="maintenance_advance" readonly="1"
+                            nolabel="1" class="obic_total_amount" />
+                        </div>
+                      </div>
+                      <div class="row pt-2">
+                        <div class="col-6">
+                          <label for="maintenance_advance_tax" class="fw-bold">保守前受消費税</label>
+                        </div>
+                        <div class="col-6 text-end">
+                          <field name="maintenance_advance_tax" readonly="1"
+                            nolabel="1" class="obic_total_amount" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- OBIC Order List View -->
+  <record id="view_obic_order_list" model="ir.ui.view">
+    <field name="name">obic.order.list</field>
+    <field name="model">obic.order</field>
+    <field name="arch" type="xml">
+      <list string="受注一覧">
+        <field name="order_number" />
+        <field name="order_date" />
+        <field name="customer_code" />
+        <field name="delivery_destination" />
+        <field name="billing_destination" />
+        <field name="sales_scheduled_date" />
+        <field name="subject" />
+      </list>
+    </field>
+  </record>
+
+  <!-- OBIC Order Search View -->
+  <record id="view_obic_order_search" model="ir.ui.view">
+    <field name="name">obic.order.search</field>
+    <field name="model">obic.order</field>
+    <field name="arch" type="xml">
+      <search string="受注検索">
+        <field name="order_number" />
+        <field name="quotation_number" />
+        <field name="customer_code" />
+        <field name="delivery_destination" />
+        <field name="subject" />
+        <filter string="今月" name="this_month"
+          domain="[('order_date', '&gt;=', context_today().strftime('%Y-%m-01'))]" />
+        <filter string="今年" name="this_year"
+          domain="[('order_date', '&gt;=', context_today().strftime('%Y-01-01'))]" />
+        <group expand="0" string="Group By">
+          <filter string="受注日" name="group_order_date" context="{'group_by': 'order_date'}" />
+          <filter string="得意先" name="group_customer" context="{'group_by': 'customer_code'}" />
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <!-- OBIC Order Action -->
+  <record id="action_obic_order" model="ir.actions.act_window">
+    <field name="name">受注管理</field>
+    <field name="path">custom_obic_order</field>
+    <field name="res_model">obic.order</field>
+    <field name="view_mode">list,form</field>
+    <field name="context">{}</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        新しい受注を作成します
+      </p>
+      <p>
+        受注情報を入力して管理できます。
+      </p>
+    </field>
+  </record>
+</odoo>

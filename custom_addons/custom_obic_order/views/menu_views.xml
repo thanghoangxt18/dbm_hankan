@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- Main Menu -->
+  <menuitem id="menu_obic_order_root"
+    name="OBIC受注"
+    sequence="10"
+    web_icon="custom_obic_order,static/description/icon.png" />
+
+  <!-- Sub Menu -->
+  <menuitem id="menu_obic_order_main"
+    name="受注管理"
+    parent="menu_obic_order_root"
+    action="action_obic_order"
+    sequence="10" />
+</odoo>
