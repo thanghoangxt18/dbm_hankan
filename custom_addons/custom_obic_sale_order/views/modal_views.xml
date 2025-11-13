@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- Related Partners Modal -->
+  <record id="view_related_partners_modal_form" model="ir.ui.view">
+    <field name="name">sale.order.related.partners.modal</field>
+    <field name="model">sale.order</field>
+    <field name="priority">999</field>
+    <field name="arch" type="xml">
+      <form string="受注入力.関連取引先情報" class="obic_modal_form">
+        <style>
+          .modal-footer { display: none !important; }
+        </style>
+        <sheet>
+          <div class="container-fluid">
+            <!-- Category tabs -->
+            <div class="row mb-3">
+              <div class="col-12">
+                <div class="obic_category_tabs">
+                  <span class="obic_tab active fw-bold">管理会社/代理店</span>
+                  <span class="obic_tab">紹介先</span>
+                  <span class="obic_tab">リース会社</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hardcoded Information Form -->
+            <div class="row mb-3">
+              <div class="col-12">
+                <div class="obic_info_section p-3 bg-light border rounded">
+                  <div class="row mb-2">
+                    <div class="col-3 text-end">
+                      <strong>コード</strong>
+                    </div>
+                    <div class="col-9">
+                      11536042
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-3 text-end">
+                      <strong>関連取引先名称</strong>
+                    </div>
+                    <div class="col-9">
+                      大東建託パートナーズ㈱ 宇都宮営業所
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-3 text-end">
+                      <strong>郵便番号</strong>
+                    </div>
+                    <div class="col-9">
+                      321 - 0951
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-3 text-end">
+                      <strong>住所1</strong>
+                    </div>
+                    <div class="col-9">
+                      栃木県宇都宮市越戸町86-1
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-3 text-end">
+                      <strong>住所2</strong>
+                    </div>
+                    <div class="col-9">
+                      &#160;
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-3 text-end">
+                      <strong>電話番号</strong>
+                    </div>
+                    <div class="col-9">
+                      028 664 1834
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-3 text-end">
+                      <strong>FAX番号</strong>
+                    </div>
+                    <div class="col-9">
+                      028 664 1838
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-3 text-end">
+                      <strong>関連先担当部署</strong>
+                    </div>
+                    <div class="col-9">
+                      &#160;
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-3 text-end">
+                      <strong>関連先担当役職</strong>
+                    </div>
+                    <div class="col-9">
+                      &#160;
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-3 text-end">
+                      <strong>関連先担当者名</strong>
+                    </div>
+                    <div class="col-9">
+                      &#160;
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="row">
+              <div class="col-12 text-end">
+                <button name="action_dummy_button" string="検索" type="object"
+                  class="btn btn-secondary me-2" disabled="1" />
+                <button name="action_dummy_button" string="前ページ" type="object"
+                  class="btn btn-secondary me-2" disabled="1" />
+                <button name="action_dummy_button" string="次へ" type="object"
+                  class="btn btn-primary me-2" />
+                <button name="action_dummy_button" string="確定" type="object"
+                  class="btn btn-primary me-2" disabled="1" />
+                <button special="cancel" string="戻る" type="object"
+                  class="btn btn-secondary" />
+              </div>
+            </div>
+          </div>
+        </sheet>
+        <footer>
+          <!-- Custom footer to override default Save/Discard buttons -->
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <!-- Contract Detail Modal -->
+  <record id="view_contract_detail_modal_form" model="ir.ui.view">
+    <field name="name">sale.order.contract.detail.modal</field>
+    <field name="model">sale.order</field>
+    <field name="priority">999</field>
+    <field name="arch" type="xml">
+      <form string="受注入力.契約詳細" class="obic_modal_form" create="false" edit="false" delete="false"
+        footer="false">
+        <style>
+          .modal-footer { display: none !important; }
+        </style>
+        <sheet>
+          <div class="container-fluid">
+            <!-- Contract Information Section -->
+            <div class="row mb-3">
+              <div class="col-12">
+                <h5 class="mb-3">&lt;契約情報&gt;</h5>
+                <div class="obic_info_section p-3 bg-light border rounded">
+                  <!-- Row 1: 施工会社 -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>施工会社</strong>
+                    </div>
+                    <div class="col-10">
+                      株式会社鈴木電気サービス
+                    </div>
+                  </div>
+
+                  <!-- Row 2: TEL and 担当者 -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>TEL</strong>
+                    </div>
+                    <div class="col-4">
+                      029-243-8050
+                    </div>
+                    <div class="col-2 text-end">
+                      <strong>担当者</strong>
+                    </div>
+                    <div class="col-4">
+                      &#160;
+                    </div>
+                  </div>
+
+                  <!-- Row 3: 別注工事会社 -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>別注工事会社</strong>
+                    </div>
+                    <div class="col-10">
+                      &#160;
+                    </div>
+                  </div>
+
+                  <!-- Row 4: TEL and 担当者 -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>TEL</strong>
+                    </div>
+                    <div class="col-4">
+                      &#160;
+                    </div>
+                    <div class="col-2 text-end">
+                      <strong>担当者</strong>
+                    </div>
+                    <div class="col-4">
+                      &#160;
+                    </div>
+                  </div>
+
+                  <!-- Row 5: 内容 -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>内容</strong>
+                    </div>
+                    <div class="col-10">
+                      &#160;
+                    </div>
+                  </div>
+
+                  <!-- Row 6: 別注工事会社 -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>別注工事会社</strong>
+                    </div>
+                    <div class="col-10">
+                      &#160;
+                    </div>
+                  </div>
+
+                  <!-- Row 7: TEL and 担当者 -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>TEL</strong>
+                    </div>
+                    <div class="col-4">
+                      &#160;
+                    </div>
+                    <div class="col-2 text-end">
+                      <strong>担当者</strong>
+                    </div>
+                    <div class="col-4">
+                      &#160;
+                    </div>
+                  </div>
+
+                  <!-- Row 8: 内容 -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>内容</strong>
+                    </div>
+                    <div class="col-10">
+                      &#160;
+                    </div>
+                  </div>
+
+                  <!-- Row 9: 備考 -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>備考</strong>
+                    </div>
+                    <div class="col-10">
+                      レンタルパック6年契約・点検無・AiAlertのみの契約
+                    </div>
+                  </div>
+
+                  <!-- Row 10: 備考 -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>備考</strong>
+                    </div>
+                    <div class="col-10">
+                      &#160;
+                    </div>
+                  </div>
+
+                  <!-- Row 11: 備考 -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>備考</strong>
+                    </div>
+                    <div class="col-10">
+                      &#160;
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Parts Information Section -->
+            <div class="row mb-3">
+              <div class="col-12">
+                <h5 class="mb-3">&lt;パーツ情報&gt;</h5>
+                <div class="obic_info_section p-3 bg-light border rounded">
+                  <!-- Row 1: 請求区分 and 保守報告書いいえ -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>請求区分</strong>
+                    </div>
+                    <div class="col-4">
+                      &#160;
+                    </div>
+                    <div class="col-2 text-end">
+                      <strong>保守報告書いいえ</strong>
+                    </div>
+                    <div class="col-4">
+                      &#160;
+                    </div>
+                  </div>
+
+                  <!-- Row 2: 出張時間 and 作業時間 -->
+                  <div class="row mb-2">
+                    <div class="col-2 text-end">
+                      <strong>出張時間</strong>
+                    </div>
+                    <div class="col-4">
+                      <span class="me-2">&#160;</span>時間<span class="ms-3 me-2">&#160;</span>分 </div>
+                    <div class="col-2 text-end">
+                      <strong>作業時間</strong>
+                    </div>
+                    <div class="col-4">
+                      <span class="me-2">&#160;</span>時間<span class="ms-3 me-2">&#160;</span>分 </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="row">
+              <div class="col-12 text-end">
+                <button name="action_dummy_button" string="検索" type="object"
+                  class="btn btn-secondary me-2" disabled="1" />
+                <button name="action_dummy_button" string="確定" type="object"
+                  class="btn btn-primary me-2" disabled="1" />
+                <button special="cancel" string="戻る" type="object"
+                  class="btn btn-secondary" />
+              </div>
+            </div>
+          </div>
+        </sheet>
+        <footer>
+          <!-- Custom footer to override default Save/Discard buttons -->
+        </footer>
+      </form>
+    </field>
+  </record>
+</odoo>

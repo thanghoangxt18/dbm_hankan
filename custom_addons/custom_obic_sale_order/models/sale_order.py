@@ -636,16 +636,16 @@ class SaleOrder(models.Model):
         }
     
     def action_show_related_partners(self):     
-        """Show related partners modal (placeholder)"""
+        """Show related partners modal"""
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': _('関連取引先'),
-                'message': _('関連取引先情報を表示します（開発中）'),
-                'type': 'info',
-                'sticky': False,
-            }
+            'name': _('受注入力.関連取引先情報'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'sale.order',
+            'view_mode': 'form',
+            'view_id': self.env.ref('custom_obic_sale_order.view_related_partners_modal_form').id,
+            'res_id': self.id,
+            'target': 'new',
+            'context': self.env.context,
         }
         
     def action_show_secondary_delivery_detail(self):
@@ -688,16 +688,17 @@ class SaleOrder(models.Model):
         }
 
     def action_show_contract_detail(self):
-        """Show contract detail modal (placeholder)"""
+        """Show contract detail modal"""
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': _('契約詳細'),
-                'message': _('契約詳細を表示します（開発中）'),
-                'type': 'info',
-                'sticky': False,
-            }
+            'name': _('受注入力.契約詳細'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'sale.order',
+            'view_mode': 'form',
+            'view_id': self.env.ref('custom_obic_sale_order.view_contract_detail_modal_form').id,
+            'res_id': self.id,
+            'target': 'new',
+            'context': self.env.context,
+            'footer': False,
         }
 
     def action_show_analysis(self):
@@ -738,3 +739,8 @@ class SaleOrder(models.Model):
               'target': 'self',
               'url': custom_preview_url,
           }
+    
+    # Dummy methods for modal buttons (do nothing)
+    def action_dummy_button(self):
+        """Dummy action that does nothing - for demo UI buttons"""
+        return True
