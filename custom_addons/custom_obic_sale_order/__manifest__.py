@@ -34,6 +34,14 @@
         'web.assets_backend': [
             'custom_obic_sale_order/static/src/css/obic_order.css',
             'custom_obic_sale_order/static/src/js/obic_order_form.js',
+            # Sale Order Line Manager Components
+            'custom_obic_sale_order/static/src/components/line_modal/line_modal.js',
+            'custom_obic_sale_order/static/src/components/line_modal/line_modal.xml',
+            'custom_obic_sale_order/static/src/components/line_section/line_section.js',
+            'custom_obic_sale_order/static/src/components/line_section/line_section.xml',
+            'custom_obic_sale_order/static/src/components/sale_order_line_manager/sale_order_line_manager.js',
+            'custom_obic_sale_order/static/src/components/sale_order_line_manager/sale_order_line_manager.xml',
+            'custom_obic_sale_order/static/src/components/sale_order_line_manager/sale_order_line_manager.scss',
         ],
     },
     'installable': True,

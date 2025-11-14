@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="custom_obic_sale_order.LineModal">
+    <!-- Modal header -->
+        <div class="modal-header">
+            <h5 class="modal-title">
+                <t t-if="props.mode === 'create'">受注明細を追加</t>
+                <t t-else="">受注明細を編集</t>
+            </h5>
+            <button type="button" class="btn-close" t-on-click="onCancelClick" aria-label="Close"></button>
+        </div>
+
+    <!-- Modal body -->
+        <div class="modal-body">
+            <div class="container-fluid">
+        <!-- Row 1: Product, Order Category, Tax Excluded, Specification -->
+                <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">商品 *</label>
+                            <select 
+                                class="form-select" 
+                                t-model="state.product_id"
+                                t-on-change="onProductChange">
+                                <option value="">-- 選択してください --</option>
+                                <t t-if="props.productList">
+                                    <t t-foreach="props.productList" t-as="product" t-key="product.id">
+                                        <option t-att-value="product.id" 
+                                                t-att-selected="state.product_id === product.id">
+                                            <t t-esc="product.name"/>
+                                        </option>
+                                    </t>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">受注区分</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                t-model="state.obic_order_category"
+                                placeholder="受注区分"/>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">外税</label>
+                            <div class="form-check">
+                                <input 
+                                    type="checkbox" 
+                                    class="form-check-input" 
+                                    t-model="state.obic_is_tax_excluded"
+                                    t-on-change="onTaxExcludedChange"
+                                    id="tax_excluded_check"/>
+                                <label class="form-check-label" for="tax_excluded_check">
+                                    外税
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">規格</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                t-model="state.obic_specification"
+                                placeholder="規格"/>
+                        </div>
+                    </div>
+
+        <!-- Row 2: Quantity, Prices, Amount, Tax -->
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label class="form-label">総数 *</label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                t-model.number="state.obic_quantity"
+                                t-on-change="calculateSalesAmount"
+                                min="1"/>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">上代単価</label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                t-model.number="state.obic_list_unit_price"
+                                t-on-change="onPriceOrDiscountChange"
+                                step="0.01"/>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">掛率 (%)</label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                t-model.number="state.obic_discount_rate"
+                                t-on-change="onPriceOrDiscountChange"
+                                step="0.01"
+                                min="0"
+                                max="100"/>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">売上単価</label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                t-model.number="state.obic_sales_unit_price"
+                                t-on-change="calculateSalesAmount"
+                                step="0.01"/>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">売上金額</label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                t-att-value="state.obic_sales_amount.toFixed(2)"
+                                readonly="readonly"
+                                style="background-color: #e9ecef;"/>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">売上消費税</label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                t-att-value="state.obic_sales_tax.toFixed(2)"
+                                readonly="readonly"
+                                style="background-color: #e9ecef;"/>
+                        </div>
+                    </div>
+
+        <!-- Row 3: Purchase, Warehouse, Cost, Gross Profit -->
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label class="form-label">発注仮単価</label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                t-model.number="state.obic_purchase_temp_unit_price"
+                                step="0.01"/>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">発注仮金額</label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                t-model.number="state.obic_purchase_temp_amount"
+                                step="0.01"/>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">倉庫</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                t-model="state.obic_warehouse_code"
+                                placeholder="倉庫"/>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">原価金額</label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                t-model.number="state.obic_cost_amount"
+                                t-on-change="onCostAmountChange"
+                                step="0.01"/>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">粗利</label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                t-att-value="state.obic_gross_profit.toFixed(2)"
+                                readonly="readonly"
+                                style="background-color: #e9ecef;"/>
+                        </div>
+                    </div>
+
+        <!-- Row 4: Shipping, Inventory, Remark -->
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">出荷先</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                t-model="state.obic_shipping_destination"
+                                placeholder="出荷先"/>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">在庫管理倉庫</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                t-model="state.obic_inventory_warehouse"
+                                placeholder="在庫管理倉庫"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">明細摘要</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                t-model="state.obic_line_remark"
+                                placeholder="明細摘要"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    <!-- Modal footer -->
+        <div class="modal-footer">
+            <button class="btn btn-primary" t-on-click="onSaveClick">
+                <i class="fa fa-save"/> 保存
+            </button>
+            <button class="btn btn-secondary" t-on-click="onCancelClick">
+                <i class="fa fa-times"/> キャンセル
+            </button>
+        </div>
+    </t>
+</templates>
