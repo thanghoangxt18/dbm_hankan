@@ -1,3 +1,104 @@
 .mb-5px {
   margin-bottom: 5px;
 }
+
+/* Modal Form Styles */
+.obic_modal_form .o_form_sheet {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Hide Save and Discard buttons in modal */
+.obic_modal_form .o_form_button_edit,
+.obic_modal_form .o_form_button_create,
+.obic_modal_form .o_form_button_cancel,
+.obic_modal_form .o_form_buttons_edit,
+.obic_modal_form .o_form_buttons_view,
+.obic_modal_form .modal-footer .o_form_button_save,
+.obic_modal_form .modal-footer .o_form_button_cancel,
+.obic_modal_form .o_form_statusbar,
+.obic_modal_form footer .o_form_button_save,
+.obic_modal_form footer .o_form_button_cancel {
+  display: none !important;
+}
+
+/* Hide default modal footer if it has default buttons */
+.obic_modal_form .modal-footer:has(.o_form_button_save),
+.obic_modal_form .modal-footer:has(.o_form_button_cancel) {
+  display: none !important;
+}
+
+/* Category Tabs Styling */
+.obic_category_tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #dee2e6;
+  margin-bottom: 20px;
+}
+
+.obic_category_tabs .obic_tab {
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-bottom: none;
+  cursor: pointer;
+  color: #495057;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  position: relative;
+  margin-right: -1px;
+}
+
+.obic_category_tabs .obic_tab:first-child {
+  border-top-left-radius: 4px;
+}
+
+.obic_category_tabs .obic_tab:last-child {
+  border-top-right-radius: 4px;
+}
+
+.obic_category_tabs .obic_tab.active {
+  background-color: #fff;
+  border-bottom: 2px solid #fff;
+  margin-bottom: -2px;
+  color: #212529;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.obic_category_tabs .obic_tab:hover:not(.active) {
+  background-color: #e9ecef;
+}
+
+.obic_modal_form .obic_info_section {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.obic_modal_form .obic_info_section .row {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.obic_modal_form .obic_info_section strong {
+  font-weight: 600;
+  color: #333;
+}
+
+.obic_modal_form h5 {
+  font-weight: bold;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 8px;
+}
+
+.obic_modal_form .btn {
+  padding: 6px 16px;
+  font-size: 14px;
+}
+
+.obic_modal_form .modal-dialog {
+  max-width: 900px;
+}
