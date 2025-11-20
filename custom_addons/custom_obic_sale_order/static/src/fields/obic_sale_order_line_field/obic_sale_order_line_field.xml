@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+  <!-- Custom X2Many Field Template - Override để customize control panel -->
+  <t t-name="custom_obic_sale_order.ObicSaleOrderLineField" t-inherit="web.X2ManyField" t-inherit-mode="primary">
+    <!-- Override control panel để hiển thị button đơn giản -->
+    <xpath expr="//div[hasclass('o_x2m_control_panel')]" position="replace">
+      <div class="o_obic_control_panel mb-3" t-if="!props.readonly and canAdd">
+        <button class="btn btn-primary" t-on-click.prevent="onAdd">
+          <i class="fa fa-plus me-1"/> 明細を追加
+        </button>
+      </div>
+    </xpath>
+  </t>
+
+  <!-- Main List Renderer Template - Kế thừa từ web.ListRenderer -->
+    <t t-name="custom_obic_sale_order.ObicSaleOrderLineListRenderer" t-inherit="web.ListRenderer" t-inherit-mode="primary">
+    <!-- Ẩn table header -->
+        <xpath expr="//thead" position="attributes">
+            <attribute name="style">display: none;</attribute>
+        </xpath>
+
+    <!-- Override table class để style cho cards -->
+        <xpath expr="//table" position="attributes">
+            <attribute name="class" add="o_obic_order_line_table" separator=" "/>
+        </xpath>
+    </t>
+
+  <!-- Custom Record Row Template - Hiển thị dạng card/section -->
+    <t t-name="custom_obic_sale_order.ObicSaleOrderLineListRenderer.RecordRow">
+        <t t-set="productName" t-value="record.data.product_id and (Array.isArray(record.data.product_id) ? record.data.product_id[1] : '') or record.data.display_name or record.data.name or ''" />
+        <tr class="o_data_row">
+            <td class="o_data_cell" colspan="100">
+                <div class="card mb-3 shadow-sm o_obic_order_line_card">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">
+                            <span class="badge bg-primary me-2">
+                                <t t-esc="record_index + 1"/>
+                            </span>
+                            <strong><t t-esc="productName"/></strong>
+                        </h6>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-primary o_obic_action_edit" 
+                                    type="button"
+                                    t-on-click="() => this.props.openRecord(record)"
+                                    title="編集">
+                                <i class="fa fa-edit"/> 編集
+                            </button>
+                            <button class="btn btn-outline-danger o_obic_action_delete" 
+                                    type="button"
+                                    t-on-click="() => this.onDeleteRecord(record)"
+                                    title="削除">
+                                <i class="fa fa-trash"/> 削除
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+            <!-- Row 1: Basic Info -->
+                        <div class="row mb-2">
+                            <div class="col-md-3">
+                                <small class="text-muted">受注区分:</small>
+                                <div><t t-esc="record.data.obic_order_category or '-'"/></div>
+                            </div>
+                            <div class="col-md-2">
+                                <small class="text-muted">外税:</small>
+                                <div>
+                                    <t t-if="record.data.obic_is_tax_excluded">
+                                        <span class="badge bg-success">はい</span>
+                                    </t>
+                                    <t t-else="">
+                                        <span class="badge bg-secondary">いいえ</span>
+                                    </t>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="text-muted">規格:</small>
+                                <div><t t-esc="record.data.obic_specification or '-'"/></div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">総数:</small>
+                                <div class="fw-bold text-primary">
+                                    <t t-esc="record.data.obic_quantity || 0"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-2"/>
+
+            <!-- Row 2: Pricing -->
+                        <div class="row mb-2">
+                            <div class="col-md-2">
+                                <small class="text-muted">上代単価:</small>
+                                <div><t t-esc="(record.data.obic_list_unit_price || 0).toFixed(2)"/></div>
+                            </div>
+                            <div class="col-md-2">
+                                <small class="text-muted">掛率:</small>
+                                <div><t t-esc="(record.data.obic_discount_rate || 0).toFixed(2)"/>%</div>
+                            </div>
+                            <div class="col-md-2">
+                                <small class="text-muted">売上単価:</small>
+                                <div><t t-esc="(record.data.obic_sales_unit_price || 0).toFixed(2)"/></div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">売上金額:</small>
+                                <div><t t-esc="(record.data.obic_sales_amount || 0).toFixed(2)"/></div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">売上税額:</small>
+                                <div><t t-esc="(record.data.obic_sales_tax || 0).toFixed(2)"/></div>
+                            </div>
+                        </div>
+
+                        <hr class="my-2"/>
+
+            <!-- Row 3: Purchase & Cost -->
+                        <div class="row mb-2">
+                            <div class="col-md-2">
+                                <small class="text-muted">仕入単価(暫定):</small>
+                                <div><t t-esc="(record.data.obic_purchase_temp_unit_price || 0).toFixed(2)"/></div>
+                            </div>
+                            <div class="col-md-2">
+                                <small class="text-muted">仕入金額(暫定):</small>
+                                <div><t t-esc="(record.data.obic_purchase_temp_amount || 0).toFixed(2)"/></div>
+                            </div>
+                            <div class="col-md-2">
+                                <small class="text-muted">倉庫コード:</small>
+                                <div><t t-esc="record.data.obic_warehouse_code or '-'"/></div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">原価金額:</small>
+                                <div><t t-esc="(record.data.obic_cost_amount || 0).toFixed(2)"/></div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">粗利益:</small>
+                                <div class="fw-bold text-success">
+                                    <t t-esc="(record.data.obic_gross_profit || 0).toFixed(2)"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-2"/>
+
+            <!-- Row 4: Additional Info -->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <small class="text-muted">出荷先:</small>
+                                <div><t t-esc="record.data.obic_shipping_destination or '-'"/></div>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="text-muted">在庫倉庫:</small>
+                                <div><t t-esc="record.data.obic_inventory_warehouse or '-'"/></div>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="text-muted">行備考:</small>
+                                <div><t t-esc="record.data.obic_line_remark or '-'"/></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </t>
+
+</templates>

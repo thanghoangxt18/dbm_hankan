@@ -1,0 +1,91 @@
+/* Custom styles cho OBIC Sale Order Line cards */
+
+/* Custom control panel button */
+.o_obic_control_panel {
+  .btn {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+
+    i {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+/* Ẩn các thành phần không cần thiết của list view */
+.o_field_obic_sale_order_line_one2many {
+
+  /* Ẩn control panel cũ của X2Many */
+  .o_x2m_control_panel {
+    display: none !important;
+  }
+
+  /* Ẩn footer của list */
+  tfoot {
+    display: none !important;
+  }
+
+  /* Ẩn các tr KHÔNG có class o_data_row trong tbody.ui-sortable */
+  tbody.ui-sortable {
+    tr:not(.o_data_row) {
+      display: none !important;
+    }
+  }
+}
+
+.o_obic_order_line_card {
+  transition: box-shadow 0.2s ease-in-out;
+
+  .card-header {
+    h6 {
+      display: flex;
+      align-items: center;
+
+      .badge {
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .card-body {
+    font-size: 0.875rem;
+
+    small.text-muted {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    hr {
+      opacity: 0.1;
+    }
+
+    .fw-bold {
+      font-size: 1rem;
+    }
+  }
+
+  .o_obic_action_edit,
+  .o_obic_action_delete {
+    cursor: pointer;
+  }
+}
+
+/* Override list renderer table styling */
+.o_obic_order_line_table {
+  thead {
+    display: none !important;
+  }
+
+  tbody {
+    tr.o_data_row {
+      border: none !important;
+
+      td {
+        border: none !important;
+        padding: 0 !important;
+        background: transparent !important;
+      }
+    }
+  }
+}

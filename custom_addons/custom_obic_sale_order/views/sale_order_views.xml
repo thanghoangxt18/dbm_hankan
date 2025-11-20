@@ -433,7 +433,32 @@
 
             <!-- Order Lines Section (明細) - Using Custom Widget -->
             <div class="obic_order_lines_section mt-2">
-              <field name="order_line" widget="sale_order_line_widget" nolabel="1" />
+              <field name="order_line" widget="obic_sale_order_line_one2many" mode="list"
+                nolabel="1" class="o_field_obic_sale_order_line_one2many"
+                context="{'default_order_id': id, 'form_view_ref': 'custom_obic_sale_order.view_obic_sale_order_line_form'}">
+                <list>
+                  <field name="product_id" />
+                  <field name="name" />
+                  <field name="product_uom_qty" />
+                  <field name="obic_order_category" />
+                  <field name="obic_is_tax_excluded" />
+                  <field name="obic_specification" />
+                  <field name="obic_quantity" />
+                  <field name="obic_list_unit_price" />
+                  <field name="obic_discount_rate" />
+                  <field name="obic_sales_unit_price" />
+                  <field name="obic_sales_amount" />
+                  <field name="obic_sales_tax" />
+                  <field name="obic_purchase_temp_unit_price" />
+                  <field name="obic_purchase_temp_amount" />
+                  <field name="obic_warehouse_code" />
+                  <field name="obic_cost_amount" />
+                  <field name="obic_gross_profit" />
+                  <field name="obic_shipping_destination" />
+                  <field name="obic_inventory_warehouse" />
+                  <field name="obic_line_remark" />
+                </list>
+              </field>
             </div>
 
             <!-- Order Totals Section -->
@@ -623,4 +648,118 @@
       </p>
     </field>
   </record>
+
+  <!-- ===================================================================== -->
+  <!-- SALE ORDER LINE FORM VIEW (for dialog) -->
+  <!-- ===================================================================== -->
+  <record id="view_obic_sale_order_line_form" model="ir.ui.view">
+    <field name="name">sale.order.line.form.obic</field>
+    <field name="model">sale.order.line</field>
+    <field name="arch" type="xml">
+      <form string="明細">
+        <sheet>
+          <div class="container-fluid px-0">
+            <!-- Row 1: Product, Order Category, Tax Excluded, Specification -->
+            <div class="row mb-3">
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="product_id" class="form-label flex-shrink-0 me-2 mb-5px">商品 *</label>
+                <field name="product_id" required="1" nolabel="1" placeholder="商品を選択してください" />
+              </div>
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_order_category" class="form-label flex-shrink-0 me-2 mb-5px">受注区分</label>
+                <field name="obic_order_category" nolabel="1" placeholder="受注区分" class="flex-grow-1" />
+              </div>
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_is_tax_excluded" class="form-label flex-shrink-0 me-2 mb-5px">外税</label>
+                <field name="obic_is_tax_excluded" nolabel="1" widget="boolean_toggle" />
+              </div>
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_specification" class="form-label flex-shrink-0 me-2 mb-5px">規格</label>
+                <field name="obic_specification" nolabel="1" placeholder="規格" class="flex-grow-1" />
+              </div>
+            </div>
+
+            <!-- Row 2: Quantity, Prices, Amount, Tax -->
+            <div class="row mb-3">
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_quantity" class="form-label flex-shrink-0 me-2 mb-5px">総数 *</label>
+                <field name="obic_quantity" nolabel="1" required="1" class="flex-grow-1" />
+              </div>
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_list_unit_price" class="form-label flex-shrink-0 me-2 mb-5px">上代単価</label>
+                <field name="obic_list_unit_price" nolabel="1" class="flex-grow-1" />
+              </div>
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_discount_rate" class="form-label flex-shrink-0 me-2 mb-5px">掛率 (%)</label>
+                <field name="obic_discount_rate" nolabel="1" class="flex-grow-1" />
+              </div>
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_sales_unit_price" class="form-label flex-shrink-0 me-2 mb-5px">売上単価</label>
+                <field name="obic_sales_unit_price" nolabel="1" class="flex-grow-1" />
+              </div>
+
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_sales_amount" class="form-label flex-shrink-0 me-2 mb-5px">売上金額</label>
+                <field name="obic_sales_amount" nolabel="1" readonly="1"
+                  style="background-color: #e9ecef;" />
+              </div>
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_sales_tax" class="form-label flex-shrink-0 me-2 mb-5px">売上消費税</label>
+                <field name="obic_sales_tax" nolabel="1" readonly="1"
+                  style="background-color: #e9ecef;" />
+              </div>
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_warehouse_code" class="form-label flex-shrink-0 me-2 mb-5px">倉庫</label>
+                <field name="obic_warehouse_code" nolabel="1" placeholder="倉庫" class="flex-grow-1" />
+              </div>
+            </div>
+
+            <!-- Row 3: Purchase, Warehouse, Cost, Gross Profit -->
+            <div class="row mb-3">
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_purchase_temp_unit_price"
+                  class="form-label flex-shrink-0 me-2 mb-5px">発注仮単価</label>
+                <field name="obic_purchase_temp_unit_price" nolabel="1" class="flex-grow-1" />
+              </div>
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_purchase_temp_amount" class="form-label flex-shrink-0 me-2 mb-5px">
+                  発注仮金額</label>
+                <field name="obic_purchase_temp_amount" nolabel="1" class="flex-grow-1" />
+              </div>
+
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_cost_amount" class="form-label flex-shrink-0 me-2 mb-5px">原価金額</label>
+                <field name="obic_cost_amount" nolabel="1" class="flex-grow-1" />
+              </div>
+              <div class="col-md-3 d-flex align-items-center mb-2">
+                <label for="obic_gross_profit" class="form-label flex-shrink-0 me-2 mb-5px">粗利</label>
+                <field name="obic_gross_profit" nolabel="1" readonly="1"
+                  style="background-color: #e9ecef;" />
+              </div>
+            </div>
+
+            <!-- Row 4: Shipping, Inventory, Remark -->
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label for="obic_shipping_destination" class="form-label">出荷先</label>
+                <field name="obic_shipping_destination" nolabel="1" placeholder="出荷先" />
+              </div>
+              <div class="col-md-3">
+                <label for="obic_inventory_warehouse" class="form-label">在庫管理倉庫</label>
+                <field name="obic_inventory_warehouse" nolabel="1" placeholder="在庫管理倉庫" />
+              </div>
+              <div class="col-md-6">
+                <label for="obic_line_remark" class="form-label">明細摘要</label>
+                <field name="obic_line_remark" nolabel="1" placeholder="明細摘要" />
+              </div>
+            </div>
+          </div>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
 </odoo>
