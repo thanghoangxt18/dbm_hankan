@@ -1,0 +1,110 @@
+/* Custom styles cho OBIC Invoice Meisai Line table */
+
+/* Custom control panel button */
+.o_obic_meisai_control_panel {
+  .btn {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+
+    i {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+/* Ẩn các thành phần không cần thiết của list view */
+.o_field_obic_invoice_meisai_line_one2many {
+
+  /* Ẩn control panel cũ của X2Many */
+  .o_x2m_control_panel {
+    display: none !important;
+  }
+
+  /* Ẩn footer của list */
+  tfoot {
+    display: none !important;
+  }
+
+  /* Ẩn các tr KHÔNG có class o_data_row trong tbody.ui-sortable */
+  tbody.ui-sortable {
+    tr:not(.o_data_row) {
+      display: none !important;
+    }
+  }
+}
+
+/* Custom table styling cho meisai lines */
+.o_obic_invoice_meisai_line_table {
+  width: 100%;
+  table-layout: auto !important;
+  border-collapse: collapse;
+
+  /* Ẩn thead hoàn toàn */
+  // thead {
+  //   display: none !important;
+  // }
+
+  thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    text-align: center !important;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    font-size: 0.875rem;
+  }
+
+  tbody {
+    tr.o_data_row {
+      border: 1px solid #dee2e6;
+
+      td {
+        padding: 8px 12px;
+        border: 1px solid #dee2e6;
+        vertical-align: middle;
+        font-size: 0.875rem;
+
+        /* Labels (bold columns) */
+        &.fw-bold {
+          background-color: #f8f9fa;
+          font-weight: 600;
+          min-width: 80px;
+        }
+
+        /* Text alignment */
+        &.text-center {
+          text-align: center;
+        }
+
+        &.text-end {
+          text-align: right;
+        }
+
+        &.text-start {
+          text-align: left;
+        }
+
+        /* Checkbox styling */
+        .form-check-input {
+          cursor: not-allowed;
+        }
+
+        /* Button group styling */
+        .btn-group {
+          .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+
+            i {
+              font-size: 0.875rem;
+            }
+          }
+        }
+      }
+
+      /* Hover effect */
+      &:hover {
+        background-color: #f8f9fa;
+      }
+    }
+  }
+}

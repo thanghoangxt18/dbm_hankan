@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  
+  <!-- Root Menu -->
+  <menuitem id="menu_obic_denpyou_root" 
+            name="OBIC伝票" 
+            sequence="6"/>
+
+  <!-- Main Menu -->
+  <menuitem id="menu_obic_denpyou_main" 
+            name="伝票管理" 
+            parent="menu_obic_denpyou_root" 
+            action="action_obic_denpyou"
+            sequence="10"/>
+
+</odoo>

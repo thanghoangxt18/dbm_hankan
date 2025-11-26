@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_obic_invoice_denpyou_line,obic.invoice.denpyou.line,model_obic_invoice_denpyou_line,base.group_user,1,1,1,1
+access_obic_invoice_meisai_line,obic.invoice.meisai.line,model_obic_invoice_meisai_line,base.group_user,1,1,1,1

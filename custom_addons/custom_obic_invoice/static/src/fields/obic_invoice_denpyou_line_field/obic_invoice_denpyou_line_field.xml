@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+  <!-- Custom X2Many Field Template - Override để customize control panel -->
+  <t t-name="custom_obic_invoice.ObicInvoiceDenpyouLineField" t-inherit="web.X2ManyField" t-inherit-mode="primary">
+    <!-- Override control panel để hiển thị button đơn giản -->
+    <xpath expr="//div[hasclass('o_x2m_control_panel')]" position="replace">
+      <div class="o_obic_control_panel mb-3" t-if="!props.readonly and canAdd">
+        <button class="btn btn-primary mb-3" t-on-click.prevent="onAdd">
+          <i class="fa fa-plus me-1"/> 伝票明細を追加
+        </button>
+      </div>
+    </xpath>
+  </t>
+
+  <!-- Main List Renderer Template - Kế thừa từ web.ListRenderer -->
+  <t t-name="custom_obic_invoice.ObicInvoiceDenpyouLineListRenderer" t-inherit="web.ListRenderer" t-inherit-mode="primary">
+    <!-- Ẩn table header -->
+    <xpath expr="//thead" position="attributes">
+      <attribute name="style">display: none;</attribute>
+    </xpath>
+
+    <!-- Override table class để style cho cards -->
+    <xpath expr="//table" position="attributes">
+      <attribute name="class" add="o_obic_invoice_denpyou_line_table" separator=" "/>
+    </xpath>
+  </t>
+
+  <!-- Custom Record Row Template - Hiển thị dạng card/section với 2 rows -->
+  <t t-name="custom_obic_invoice.ObicInvoiceDenpyouLineListRenderer.RecordRow">
+    <t t-set="denpyouNumber" t-value="record.data.denpyou_number or '-'" />
+
+    <!-- Format Luxon DateTime objects to YYYY-MM-DD -->
+    <t t-set="denpyouDate" t-value="record.data.denpyou_date ? record.data.denpyou_date.toFormat('yyyy-MM-dd') : '-'" />
+    <t t-set="collectionDate" t-value="record.data.collection_date ? record.data.collection_date.toFormat('yyyy-MM-dd') : '-'" />
+    
+    <tr class="o_data_row">
+      <td class="o_data_cell" colspan="100">
+        <div class="card mb-3 shadow-sm o_obic_denpyou_line_card">
+          <!-- Card Header with Index and Buttons -->
+          <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">
+              <span class="badge bg-primary me-2">
+                <t t-esc="record_index + 1"/>
+              </span>
+              <strong>伝票: <t t-esc="denpyouNumber"/></strong>
+            </h6>
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-outline-primary o_obic_action_edit" 
+                      type="button"
+                      t-on-click="() => this.props.openRecord(record)"
+                      title="編集">
+                <i class="fa fa-edit"/> 編集
+              </button>
+              <button class="btn btn-outline-danger o_obic_action_delete" 
+                      type="button"
+                      t-on-click="() => this.onDeleteRecord(record)"
+                      title="削除">
+                <i class="fa fa-trash"/> 削除
+              </button>
+            </div>
+          </div>
+          
+          <div class="card-body">
+            <!-- Row 1: 伝票番号 | 伝票日付 | 回収予定日 | 伝票金額 | 今回請求額 | 請求対象 -->
+            <div class="row mb-2">
+              <div class="col-md-2">
+                <small class="text-muted fw-bold">伝票番号:</small>
+                <div><t t-esc="denpyouNumber"/></div>
+              </div>
+              <div class="col-md-2">
+                <small class="text-muted fw-bold">伝票日付:</small>
+                <div><t t-esc="denpyouDate"/></div>
+              </div>
+              <div class="col-md-2">
+                <small class="text-muted fw-bold">回収予定日:</small>
+                <div><t t-esc="collectionDate"/></div>
+              </div>
+              <div class="col-md-2">
+                <small class="text-muted fw-bold">伝票金額:</small>
+                <div class="fw-bold text-start">
+                  <t t-esc="(record.data.denpyou_amount || 0).toFixed(2)"/>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <small class="text-muted fw-bold">今回請求額:</small>
+                <div class="fw-bold text-primary text-start">
+                  <t t-esc="(record.data.current_billing_amount || 0).toFixed(2)"/>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <small class="text-muted fw-bold">請求対象:</small>
+                <div>
+                  <input type="checkbox" 
+                         t-att-checked="record.data.is_billing_target ? 'checked' : undefined"
+                         disabled="disabled"
+                         class="form-check-input" />
+                </div>
+              </div>
+            </div>
+
+            <hr class="my-2"/>
+
+            <!-- Row 2: 得意先 | 担当者 | 伝票摘要 -->
+            <div class="row">
+              <div class="col-md-3">
+                <small class="text-muted fw-bold">得意先:</small>
+                <div><t t-esc="record.data.customer_code or '-'"/></div>
+              </div>
+              <div class="col-md-3">
+                <small class="text-muted fw-bold">担当者:</small>
+                <div><t t-esc="record.data.person_in_charge or '-'"/></div>
+              </div>
+              <div class="col-md-6">
+                <small class="text-muted fw-bold">伝票摘要:</small>
+                <div><t t-esc="record.data.denpyou_summary or '-'"/></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </t>
+
+</templates>

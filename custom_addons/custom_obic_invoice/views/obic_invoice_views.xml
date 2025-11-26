@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- ==================== FORM VIEW (COMPLETE CUSTOM) ==================== -->
+  <record id="view_obic_invoice_form_custom" model="ir.ui.view">
+    <field name="name">obic.invoice.form.custom</field>
+    <field name="model">account.move</field>
+    <field name="priority">1</field>
+    <field name="arch" type="xml">
+      <form string="請求入力">
+        <sheet>
+          <group col="5">
+            <group colspan="1">
+              <field name="invoice_number" placeholder="請求番号" />
+            </group>
+            <group colspan="2" />
+            <group colspan="2">
+              <field name="reference_date" placeholder="基準日" />
+              <field name="previous_input_number" placeholder="前回入力番号" />
+            </group>
+          </group>
+
+          <div class="row">
+            <div class="col-6">
+              <group>
+                <field name="business_office" string="事業所" placeholder="事業所" />
+                <field name="billing_destination" string="請求先" placeholder="請求先" />
+                <field name="invoice_date_custom" string="請求日" placeholder="請求日" />
+                <field name="collection_date" string="回収予定日" placeholder="回収予定日" />
+                <field name="invoice_unit" string="請求単位" widget="radio" required="1"
+                  options="{'horizontal': true}" />
+                <field name="invoice_subject" />
+                <field name="denpyou_summary" />
+              </group>
+            </div>
+            <div class="col-6">
+              <group>
+                <field name="department" string="部門" placeholder="部門" />
+              </group>
+
+              <!-- 抽出条件 Section -->
+              <group class="border p-3 mt-4">
+                <span style="font-weight: bold;font-size: 20px;">抽出条件</span>
+                <field name="department_group_1" placeholder="部門グループ1" />
+                <field name="accounting_department" placeholder="経理部門" />
+                <field name="customer" placeholder="顧客" />
+                <field name="person_in_charge" placeholder="担当者" />
+                <field name="sales_date" placeholder="販売日" />
+                <field name="sales_number" placeholder="販売番号" />
+                <field name="operator" placeholder="オペレーター" />
+                <field name="change_date" placeholder="変更日" />
+              </group>
+            </div>
+          </div>
+
+          <!-- Tax adjustment -->
+          <group>
+            <group>
+              <field name="tax_adjustment_amount" />
+            </group>
+            <group>
+              <button name="action_adjustment_detail_input"
+                string="調整明細入力"
+                type="object"
+                class="btn-secondary" />
+            </group>
+          </group>
+
+          <!-- Notebook with conditional pages -->
+          <notebook>
+            <!-- Page 1: 伝票単位 mode -->
+            <page string="伝票明細"
+              name="denpyou_lines"
+              invisible="invoice_unit != 'denpyou'">
+
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="float-end">
+                    <button name="action_set_all_denpyou_billing_true"
+                      string="一括請求"
+                      type="object"
+                      class="btn-primary me-2" />
+                    <button name="action_set_all_denpyou_billing_false"
+                      string="一括解除"
+                      type="object"
+                      class="btn-secondary me-3" />
+                  </div>
+                </div>
+              </div>
+
+              <field name="invoice_denpyou_line_ids"
+                widget="obic_invoice_denpyou_line_one2many"
+                mode="list"
+                nolabel="1"
+                class="o_field_obic_invoice_denpyou_line_one2many"
+                context="{'form_view_ref': 'custom_obic_invoice.view_obic_invoice_denpyou_line_form'}">
+                <list>
+                  <field name="sequence" widget="handle" />
+                  <field name="denpyou_id" />
+                  <field name="denpyou_number" invisible="1" />
+                  <field name="customer_code" />
+                  <field name="denpyou_date" />
+                  <field name="collection_date" />
+                  <field name="denpyou_amount" />
+                  <field name="current_billing_amount" />
+                  <field name="person_in_charge" />
+                  <field name="denpyou_summary" />
+                  <field name="is_billing_target" />
+                </list>
+              </field>
+
+              <!-- Buttons and Total for Denpyou mode -->
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="float-end" style="margin-right: 200px;">
+                    <span class="fw-bold me-2">今回請求額合計:</span>
+                    <field name="total_current_billing_amount_denpyou"
+                      readonly="1"
+                      nolabel="1"
+                      class="fw-bold text-primary"
+                      widget="monetary"
+                      options="{'currency_field': false}" />
+                  </div>
+                </div>
+              </div>
+            </page>
+
+            <!-- Page 2: 明細単位 mode -->
+            <page string="明細"
+              name="meisai_lines"
+              invisible="invoice_unit != 'meisai'">
+
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="float-end">
+                    <button name="action_set_all_meisai_billing_true"
+                      string="一括請求"
+                      type="object"
+                      class="btn-primary me-2" />
+                    <button name="action_set_all_meisai_billing_false"
+                      string="一括解除"
+                      type="object"
+                      class="btn-secondary me-3" />
+                  </div>
+                </div>
+              </div>
+
+              <field name="invoice_meisai_line_ids"
+                widget="obic_invoice_meisai_line_one2many"
+                mode="list"
+                nolabel="1"
+                class="o_field_obic_invoice_meisai_line_one2many"
+                context="{'form_view_ref': 'custom_obic_invoice.view_obic_invoice_meisai_line_form'}">
+                <list>
+                  <field name="sequence" string="行番号" />
+                  <field name="product_id" string="商品名" />
+                  <field name="detail_amount" string="明細金額" />
+                  <!-- <field name="quantity" string="数量" /> -->
+                  <field name="current_billing_amount" string="今回請求額" />
+                  <field name="is_billing" string="請求" />
+                </list>
+              </field>
+
+              <!-- Buttons and Total for Meisai mode -->
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="float-end" style="margin-right: 200px;">
+                    <span class="fw-bold me-2">今回請求額合計:</span>
+                    <field name="total_current_billing_amount_meisai"
+                      readonly="1"
+                      nolabel="1"
+                      class="fw-bold text-primary"
+                      widget="monetary"
+                      options="{'currency_field': false}" />
+                  </div>
+                </div>
+              </div>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- ==================== DENPYOU LINE DIALOG FORM ==================== -->
+  <record id="view_obic_invoice_denpyou_line_form" model="ir.ui.view">
+    <field name="name">obic.invoice.denpyou.line.form</field>
+    <field name="model">obic.invoice.denpyou.line</field>
+    <field name="arch" type="xml">
+      <form string="伝票明細">
+        <sheet>
+          <group>
+            <group>
+              <field name="denpyou_id" required="1" />
+              <field name="customer_code" />
+              <field name="denpyou_date" />
+              <field name="collection_date" />
+            </group>
+            <group>
+              <field name="denpyou_amount" />
+              <field name="current_billing_amount" />
+              <field name="person_in_charge" />
+              <field name="is_billing_target" />
+            </group>
+          </group>
+          <group>
+            <field name="denpyou_summary" />
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- ==================== MEISAI LINE DIALOG FORM ==================== -->
+  <record id="view_obic_invoice_meisai_line_form" model="ir.ui.view">
+    <field name="name">obic.invoice.meisai.line.form</field>
+    <field name="model">obic.invoice.meisai.line</field>
+    <field name="arch" type="xml">
+      <form string="明細">
+        <sheet>
+          <group>
+            <group>
+              <field name="product_id" required="1" />
+              <field name="detail_amount" />
+            </group>
+            <group>
+              <field name="quantity" />
+              <field name="current_billing_amount" />
+              <field name="is_billing" />
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- ==================== LIST VIEW ==================== -->
+  <record id="view_obic_invoice_tree" model="ir.ui.view">
+    <field name="name">obic.invoice.tree</field>
+    <field name="model">account.move</field>
+    <field name="arch" type="xml">
+      <list string="請求一覧">
+        <field name="invoice_number" />
+        <field name="reference_date" />
+        <field name="billing_destination" />
+        <field name="invoice_date_custom" />
+        <field name="invoice_unit" />
+        <field name="total_current_billing_amount_denpyou"
+          string="今回請求額合計(伝票)"
+          sum="Total"
+          invisible="invoice_unit != 'denpyou'" />
+        <field name="total_current_billing_amount_meisai"
+          string="今回請求額合計(明細)"
+          sum="Total"
+          invisible="invoice_unit != 'meisai'" />
+      </list>
+    </field>
+  </record>
+
+  <!-- ==================== SEARCH VIEW ==================== -->
+  <record id="view_obic_invoice_search" model="ir.ui.view">
+    <field name="name">obic.invoice.search</field>
+    <field name="model">account.move</field>
+    <field name="arch" type="xml">
+      <search string="請求検索">
+        <field name="invoice_number" />
+        <field name="billing_destination" />
+        <field name="invoice_unit" />
+        <field name="customer" />
+
+        <filter string="伝票単位"
+          name="filter_denpyou"
+          domain="[('invoice_unit', '=', 'denpyou')]" />
+        <filter string="明細単位"
+          name="filter_meisai"
+          domain="[('invoice_unit', '=', 'meisai')]" />
+
+        <group expand="0" string="Group By">
+          <filter string="請求単位"
+            name="group_invoice_unit"
+            context="{'group_by': 'invoice_unit'}" />
+          <filter string="請求先"
+            name="group_billing_destination"
+            context="{'group_by': 'billing_destination'}" />
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <!-- ==================== ACTION ==================== -->
+  <record id="action_obic_invoice" model="ir.actions.act_window">
+    <field name="name">請求管理</field>
+    <field name="path">custom_obic_invoice</field>
+    <field name="res_model">account.move</field>
+    <field name="view_mode">list,form</field>
+    <field name="domain">[('move_type', '=', 'out_invoice')]</field>
+    <field name="context">{
+      'default_move_type': 'out_invoice',
+      'default_invoice_unit': 'denpyou',
+      }</field>
+    <field name="view_ids"
+      eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_obic_invoice_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_obic_invoice_form_custom')}),
+        ]" />
+  </record>
+</odoo>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+  <!-- Custom X2Many Field Template - Override để customize control panel -->
+  <t t-name="custom_obic_invoice.ObicInvoiceMeisaiLineField" t-inherit="web.X2ManyField" t-inherit-mode="primary">
+    <!-- Override control panel để hiển thị button đơn giản -->
+    <xpath expr="//div[hasclass('o_x2m_control_panel')]" position="replace">
+      <div class="o_obic_meisai_control_panel mb-3" t-if="!props.readonly and canAdd">
+        <button class="btn btn-primary mb-3" t-on-click.prevent="onAdd">
+          <i class="fa fa-plus me-1"/> 明細を追加
+        </button>
+      </div>
+    </xpath>
+  </t>
+
+  <!-- Main List Renderer Template - Kế thừa từ web.ListRenderer -->
+  <t t-name="custom_obic_invoice.ObicInvoiceMeisaiLineListRenderer" t-inherit="web.ListRenderer" t-inherit-mode="primary">
+    <!-- Ẩn table header hoàn toàn -->
+    <!-- <xpath expr="//thead" position="attributes">
+      <attribute name="style">display: none;</attribute>
+    </xpath> -->
+
+    <!-- Override table class để style -->
+    <xpath expr="//table" position="attributes">
+      <attribute name="class" add="o_obic_invoice_meisai_line_table" separator=" "/>
+    </xpath>
+  </t>
+
+  <!-- Custom Record Row Template - Match list view fields -->
+  <t t-name="custom_obic_invoice.ObicInvoiceMeisaiLineListRenderer.RecordRow">
+    <t t-set="productName" t-value="record.data.product_id and (Array.isArray(record.data.product_id) ? record.data.product_id[1] : '') or ''"/>
+    
+    <tr class="o_data_row">
+      <!-- Col 1: 行番号 (sequence) -->
+      <td class="text-center">
+        <t t-esc="record_index + 1"/>
+      </td>
+
+      <!-- Col 2: 商品名 (product_id) -->
+      <td class="text-start">
+        <t t-esc="productName"/>
+      </td>
+
+      <!-- Col 3: 明細金額 (detail_amount) -->
+      <td class="text-end">
+        <t t-esc="(record.data.detail_amount || 0).toFixed(2)"/>
+      </td>
+
+      <!-- Col 4: 数量 (quantity) -->
+      <!-- <td class="text-end">
+        <t t-esc="(record.data.quantity || 0).toFixed(2)"/>
+      </td> -->
+
+      <!-- Col 5: 今回請求額 (current_billing_amount) -->
+      <td class="text-end">
+        <t t-esc="(record.data.current_billing_amount || 0).toFixed(2)"/>
+      </td>
+
+      <!-- Col 6: 請求 (is_billing) -->
+      <td class="text-center">
+        <input type="checkbox" 
+               t-att-checked="record.data.is_billing ? 'checked' : undefined"
+               disabled="disabled"
+               class="form-check-input"/>
+      </td>
+
+      <!-- Col 7: Edit & Delete buttons -->
+      <td class="text-center">
+        <div class="btn-group btn-group-sm">
+          <button class="btn btn-outline-primary" 
+                  type="button"
+                  t-on-click="() => this.props.openRecord(record)"
+                  title="編集">
+            <i class="fa fa-edit"/>
+          </button>
+          <button class="btn btn-outline-danger" 
+                  type="button"
+                  t-on-click="() => this.onDeleteRecord(record)"
+                  title="削除">
+            <i class="fa fa-trash"/>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </t>
+
+</templates>

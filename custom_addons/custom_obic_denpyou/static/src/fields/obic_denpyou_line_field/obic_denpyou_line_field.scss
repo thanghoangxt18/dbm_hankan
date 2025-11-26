@@ -1,0 +1,154 @@
+/* Custom styles cho OBIC Denpyou Line table */
+
+/* Custom control panel button */
+.o_obic_denpyou_control_panel_left {
+  display: inline-block;
+
+  .btn {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+
+    i {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+/* Ẩn các thành phần không cần thiết của list view */
+.o_field_obic_denpyou_line_one2many {
+
+  /* Ẩn control panel cũ của X2Many */
+  .o_x2m_control_panel {
+    display: none !important;
+  }
+
+  /* Ẩn footer của list */
+  tfoot {
+    display: none !important;
+  }
+
+  /* Ẩn các tr KHÔNG có class o_data_row trong tbody.ui-sortable */
+  tbody.ui-sortable {
+    tr:not(.o_data_row) {
+      display: none !important;
+    }
+  }
+}
+
+/* Custom table styling cho denpyou lines */
+.o_obic_denpyou_line_table {
+  width: 100%;
+  table-layout: auto !important;
+  border-collapse: collapse;
+
+  /* Table header styling */
+  thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    text-align: center !important;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    font-size: 0.875rem;
+  }
+
+  /* Column widths */
+  col:nth-child(1) {
+    width: 80px;
+  }
+
+  /* 行番号 */
+  col:nth-child(2) {
+    width: auto;
+  }
+
+  /* 商品名 */
+  col:nth-child(3) {
+    width: 120px;
+  }
+
+  /* 明細金額 */
+  col:nth-child(4) {
+    width: 120px;
+  }
+
+  /* 今回請求額 */
+  col:nth-child(5) {
+    width: 80px;
+  }
+
+  /* 請求 checkbox */
+  col:nth-child(6) {
+    width: 100px;
+  }
+
+  /* Buttons */
+
+  tbody {
+    tr.o_data_row {
+      border: 1px solid #dee2e6;
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+
+      td {
+        padding: 8px 12px;
+        border: 1px solid #dee2e6;
+        vertical-align: middle;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        /* Text alignment */
+        &.text-center {
+          text-align: center;
+        }
+
+        &.text-end {
+          text-align: right;
+        }
+
+        &.text-start {
+          text-align: left;
+        }
+
+        /* Checkbox styling */
+        .form-check-input {
+          cursor: not-allowed;
+        }
+
+        /* Button group styling */
+        .btn-group {
+          display: inline-flex;
+          gap: 4px;
+
+          .btn {
+            padding: 4px 8px;
+            font-size: 13px;
+            line-height: 1.2;
+          }
+        }
+      }
+
+      /* Product name column - allow wrap */
+      td:nth-child(3) {
+        white-space: normal;
+        word-break: break-word;
+      }
+    }
+  }
+}
+
+/* Total row styling - Simple margin-right */
+.obic_denpyou_total_row {
+  margin-top: 10px;
+  margin-right: 223px;
+  text-align: right;
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  strong {
+    margin-right: 8px;
+  }
+}

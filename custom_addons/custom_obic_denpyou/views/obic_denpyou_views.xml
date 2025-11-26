@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  
+  <!-- ===================================================================== -->
+  <!-- OBIC DENPYOU FORM VIEW -->
+  <!-- ===================================================================== -->
+  <record id="view_obic_denpyou_form" model="ir.ui.view">
+    <field name="name">obic.denpyou.form</field>
+    <field name="model">obic.denpyou</field>
+    <field name="arch" type="xml">
+      <form string="伝票入力">
+        <sheet>
+          <group col="3">
+            <group>
+              <field name="denpyou_number" placeholder="伝票番号"/>
+            </group>
+            <group>
+              <field name="customer_code" placeholder="得意先"/>
+              <field name="delivery_destination" placeholder="納入先"/>
+              <field name="denpyou_summary" placeholder="伝票摘要"/>
+            </group>
+            <group>
+              <field name="subject" placeholder="件名"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="明細" name="lines">
+              <!-- Buttons row: 明細を追加 on left, 一括請求/一括解除 on right -->
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                  <!-- This space is for 明細を追加 button from widget -->
+                </div>
+                <div>
+                  <button name="action_set_all_billing_true" 
+                          string="一括請求" 
+                          type="object" 
+                          class="btn-primary me-2"/>
+                  <button name="action_set_all_billing_false" 
+                          string="一括解除" 
+                          type="object" 
+                          class="btn-secondary"/>
+                </div>
+              </div>
+              
+              <!-- Custom One2many field với widget đặc biệt -->
+              <field name="line_ids" 
+                     widget="obic_denpyou_line_one2many" 
+                     mode="list"
+                     nolabel="1"
+                     class="o_field_obic_denpyou_line_one2many"
+                     context="{'form_view_ref': 'custom_obic_denpyou.view_obic_denpyou_line_form'}">
+                <list string="明細一覧">
+                  <field name="sequence" string="行番号"/>
+                  <field name="product_id" string="商品名"/>
+                  <field name="detail_amount" string="明細金額"/>
+                  <field name="current_billing_amount" string="今回請求額"/>
+                  <field name="is_billing" string="請求"/>
+                </list>
+              </field>
+
+              <!-- Total row - Simple right-aligned -->
+              <div class="obic_denpyou_total_row">
+                <strong>今回請求額合計:</strong>
+                <field name="total_current_billing_amount" 
+                       nolabel="1" 
+                       readonly="1"
+                       widget="monetary"
+                       options="{'currency_field': false}"/>
+              </div>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- ===================================================================== -->
+  <!-- OBIC DENPYOU LIST VIEW -->
+  <!-- ===================================================================== -->
+  <record id="view_obic_denpyou_list" model="ir.ui.view">
+    <field name="name">obic.denpyou.list</field>
+    <field name="model">obic.denpyou</field>
+    <field name="arch" type="xml">
+      <list string="伝票一覧">
+        <field name="denpyou_number"/>
+        <field name="customer_code"/>
+        <field name="delivery_destination"/>
+        <field name="denpyou_summary"/>
+        <field name="subject"/>
+        <field name="total_current_billing_amount" sum="Total"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- ===================================================================== -->
+  <!-- OBIC DENPYOU SEARCH VIEW -->
+  <!-- ===================================================================== -->
+  <record id="view_obic_denpyou_search" model="ir.ui.view">
+    <field name="name">obic.denpyou.search</field>
+    <field name="model">obic.denpyou</field>
+    <field name="arch" type="xml">
+      <search string="伝票検索">
+        <field name="denpyou_number"/>
+        <field name="customer_code"/>
+        <field name="delivery_destination"/>
+        <field name="subject"/>
+        
+        <group expand="0" string="Group By">
+          <filter string="得意先" name="group_customer" 
+                  context="{'group_by': 'customer_code'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <!-- ===================================================================== -->
+  <!-- OBIC DENPYOU LINE FORM VIEW (for dialog) -->
+  <!-- ===================================================================== -->
+  <record id="view_obic_denpyou_line_form" model="ir.ui.view">
+    <field name="name">obic.denpyou.line.form</field>
+    <field name="model">obic.denpyou.line</field>
+    <field name="arch" type="xml">
+      <form string="明細">
+        <sheet>
+          <group>
+            <group>
+              <field name="product_id" string="商品名" required="1"/>
+              <field name="detail_amount" string="明細金額"/>
+              <field name="quantity" string="数量"/>
+            </group>
+            <group>
+              <field name="current_billing_amount" string="今回請求額"/>
+              <field name="is_billing" string="請求"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- ===================================================================== -->
+  <!-- OBIC DENPYOU ACTION -->
+  <!-- ===================================================================== -->
+  <record id="action_obic_denpyou" model="ir.actions.act_window">
+    <field name="name">OBIC伝票管理</field>
+    <field name="path">custom_obic_denpyou</field>
+    <field name="res_model">obic.denpyou</field>
+    <field name="view_mode">list,form</field>
+    <field name="view_ids" 
+           eval="[(5, 0, 0),
+                  (0, 0, {'view_mode': 'list', 'view_id': ref('view_obic_denpyou_list')}),
+                  (0, 0, {'view_mode': 'form', 'view_id': ref('view_obic_denpyou_form')})]"/>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        新しい伝票を作成します
+      </p>
+      <p>
+        伝票情報を入力して管理できます。
+      </p>
+    </field>
+  </record>
+
+</odoo>

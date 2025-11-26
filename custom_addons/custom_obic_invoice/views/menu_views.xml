@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_obic_invoice_root" 
+              name="OBIC請求" 
+              sequence="7"/>
+
+    <!-- Main Menu -->
+    <menuitem id="menu_obic_invoice_main" 
+              name="請求管理" 
+              parent="menu_obic_invoice_root" 
+              action="action_obic_invoice"
+              sequence="1"/>
+</odoo>
