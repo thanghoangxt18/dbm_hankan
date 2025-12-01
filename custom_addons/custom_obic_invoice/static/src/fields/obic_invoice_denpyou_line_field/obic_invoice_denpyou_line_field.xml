@@ -5,11 +5,33 @@
   <t t-name="custom_obic_invoice.ObicInvoiceDenpyouLineField" t-inherit="web.X2ManyField" t-inherit-mode="primary">
     <!-- Override control panel để hiển thị button đơn giản -->
     <xpath expr="//div[hasclass('o_x2m_control_panel')]" position="replace">
-      <div class="o_obic_control_panel mb-3" t-if="!props.readonly and canAdd">
+      <div class="d-flex justify-content-between align-items-center" t-if="!props.readonly" style="margin-bottom: 32px;">
+        <!-- Left: 明細を追加 button -->
+        <div>
+          <button class="btn btn-primary" t-on-click.prevent="onAdd" t-if="canAdd">
+            <i class="fa fa-plus me-1"/> 伝票明細を追加
+          </button>
+        </div>
+
+        <!-- Right: Bulk action buttons -->
+        <div class="btn-group">
+          <button class="btn btn-primary" 
+                  type="button"
+                  t-on-click.prevent="onBulkBillingTrue">
+            一括請求
+          </button>
+          <button class="btn btn-secondary" 
+                  type="button"
+                  t-on-click.prevent="onBulkBillingFalse">
+            一括解除
+          </button>
+        </div>
+      </div>
+      <!-- <div class="o_obic_control_panel mb-3" t-if="!props.readonly and canAdd">
         <button class="btn btn-primary mb-3" t-on-click.prevent="onAdd">
           <i class="fa fa-plus me-1"/> 伝票明細を追加
         </button>
-      </div>
+      </div> -->
     </xpath>
   </t>
 

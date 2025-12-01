@@ -80,6 +80,44 @@ export class ObicInvoiceMeisaiLineField extends X2ManyField {
   get canAdd() {
     return this.activeActions.create;
   }
+
+
+  /**
+   * Set is_billing for all lines (in-memory only)
+   * @param {boolean} value - true for 一括請求, false for 一括解除
+   */
+  setAllBilling(value) {
+    if (!this.list || !this.list.records) {
+      console.warn('No records to update');
+      return;
+    }
+
+    const records = this.list.records;
+    console.log(`Updating is_billing=${value} for ${records.length} lines`);
+
+    // Loop through all records and update in-memory
+    records.forEach(record => {
+      record.update({ is_billing: value });
+    });
+
+    console.log(`Updated ${records.length} lines successfully`);
+  }
+
+  /**
+   * 一括請求 - Set all lines to is_billing=true
+   */
+  onBulkBillingTrue() {
+    console.log('Bulk Billing True triggered');
+    this.setAllBilling(true);
+  }
+
+  /**
+   * 一括解除 - Set all lines to is_billing=false
+   */
+  onBulkBillingFalse() {
+    console.log('Bulk Billing False triggered');
+    this.setAllBilling(false);
+  }
 }
 
 /**

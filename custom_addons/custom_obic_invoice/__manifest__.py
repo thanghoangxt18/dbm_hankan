@@ -28,6 +28,7 @@
     ],
     'assets': {
         'web.assets_backend': [
+            'custom_obic_invoice/static/src/css/obic_invoice.css',
             # Denpyou line widget (SECTION/CARD format)
             'custom_obic_invoice/static/src/fields/obic_invoice_denpyou_line_field/obic_invoice_denpyou_line_field.js',
             'custom_obic_invoice/static/src/fields/obic_invoice_denpyou_line_field/obic_invoice_denpyou_line_field.xml',
