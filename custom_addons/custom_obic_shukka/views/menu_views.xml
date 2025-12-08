@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- Main Menu -->
+  <menuitem id="menu_obic_shukka_root" name="OBIC出荷管理" sequence="10" web_icon="custom_obic_shukka,static/description/icon.png" />
+
+  <!-- Sub Menu -->
+  <menuitem id="menu_obic_shukka_main" name="OBIC出荷処理" parent="menu_obic_shukka_root" action="action_obic_shukka" sequence="10" />
+</odoo>

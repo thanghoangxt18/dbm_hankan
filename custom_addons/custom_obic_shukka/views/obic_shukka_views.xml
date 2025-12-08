@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- ==================== FORM VIEW (MAIN) ==================== -->
+  <record id="view_obic_shukka_form" model="ir.ui.view">
+    <field name="name">obic.shukka.form</field>
+    <field name="model">obic.shukka</field>
+    <field name="arch" type="xml">
+      <form string="出荷処理入力">
+        <sheet>
+          <!-- ==================== PHẦN 1: TOP (2 groups 4-1) ==================== -->
+          <group col="5">
+            <group colspan="2">
+              <!-- Bên trái -->
+              <field name="shukka_process_number" placeholder="出荷処理番号" />
+              <field name="shukka_number" placeholder="出荷番号" />
+              <field name="shukka_process_type" widget="radio" options="{'horizontal': true}" />
+            </group>
+            <group colspan="1" />
+            <group colspan="2">
+              <!-- Bên phải -->
+              <field name="reference_date" placeholder="基準日" />
+              <field name="previous_shukka_process_number" placeholder="前回出荷処理番号" />
+              <field name="previous_shukka_number" placeholder="前回出荷番号" />
+            </group>
+          </group>
+
+          <!-- ==================== PHẦN 2: MIDDLE (2 cột 5-7) ==================== -->
+          <div class="row">
+            <!-- Left (5/12) -->
+            <div class="col-4">
+              <div class="d-flex align-items-center mb-2">
+                <label for="shukka_classification" string="出荷区分" class="width-62 flex-shrink-0 me-2 mb-5px" />
+                <field name="shukka_classification" placeholder="出荷区分" class="flex-grow-1" />
+              </div>
+              <div class="d-flex align-items-center mb-2">
+                <label for="shukka_date" string="出荷日" class="width-62 flex-shrink-0 me-2 mb-5px" />
+                <field name="shukka_date" placeholder="出荷日" class="flex-grow-1" />
+              </div>
+              <div class="d-flex align-items-center mb-2">
+                <label for="warehouse" string="倉庫" class="width-62 flex-shrink-0 me-2 mb-5px" />
+                <field name="warehouse" placeholder="倉庫" class="flex-grow-1" />
+              </div>
+              <div class="d-flex align-items-center mb-2">
+                <label for="packing_date" string="梱包日" class="width-62 flex-shrink-0 me-2 mb-5px" />
+                <field name="packing_date" placeholder="梱包日" class="flex-grow-1" />
+              </div>
+              <div class="d-flex align-items-center mb-2">
+                <label for="summary" string="摘要" class="width-62 flex-shrink-0 me-2 mb-5px" />
+                <field name="summary" placeholder="摘要" class="flex-grow-1" />
+              </div>
+              <div class="d-flex align-items-center mb-2">
+                <label for="delivery_date" string="納期" class="width-62 flex-shrink-0 me-2 mb-5px" />
+                <field name="delivery_date" placeholder="納期" class="flex-grow-1" />
+              </div>
+              <div class="d-flex align-items-center mb-2">
+                <label for="shipping_company" string="配送業者" class="width-62 flex-shrink-0 me-2 mb-5px" />
+                <field name="shipping_company" placeholder="配送業者" class="flex-grow-1" />
+              </div>
+              <!-- 3 Buttons trên 1 dòng -->
+              <div class="row mt-2">
+                <div class="col-12">
+                  <button name="action_bulk_update_shipping_company" string="配送業者一括更新" type="object" class="btn-secondary me-2 W" />
+                  <button name="action_bulk_overwrite_delivery_date" string="納期一括上書き" type="object" class="btn-secondary me-2" />
+                  <button name="action_recalculate_delivery_date" string="納期再計算" type="object" class="btn-secondary" />
+                </div>
+              </div>
+
+              <!-- 2 Fields trên 1 dòng -->
+              <div class="row mt-3">
+                <div class="col-8 d-flex">
+                  <label for="display_unit" string="表示単位" class="o_form_label width-62 flex-shrink-0 me-2 mb-5px" />
+                  <field name="display_unit" widget="radio" nolabel="1" options="{'horizontal': true}"/>
+                </div>
+                <div class="col-4 d-flex align-items-end">
+                  <button name="action_display_switch" string="表示切替" type="object" class="btn-secondary" />
+                </div>
+              </div>
+
+              <!-- Sort options -->
+              <div class="row mt-2">
+                <div class="col-12">
+                  <label for="sort_details" string="明細並び" class="o_form_label width-62 flex-shrink-0 me-2 mb-5px" />
+                  <field name="sort_details" widget="radio" nolabel="1" options="{'horizontal': true}"/>
+                </div>
+              </div>
+              <!-- </group> -->
+            </div>
+
+            <!-- Right (7/12) -->
+            <div class="col-8">
+              <div class="border p-3">
+                <span class="block" style="font-weight: bold;font-size: 20px;">抽出条件</span>
+
+                <!-- 3 Fields trên 1 dòng -->
+                <div class="row mt-2">
+                  <div class="col-5">
+                    <label for="data_classification" string="データ区分" class="o_form_label flex-shrink-0 me-2 mb-5px width-92" />
+                    <field name="data_classification" widget="radio" nolabel="1" options="{'horizontal': true}"/>
+                  </div>
+                  <div class="col-4">
+                    <label for="shukka_target" string="出荷対象" class="o_form_label width-62 flex-shrink-0 me-2 mb-5px" />
+                    <field name="shukka_target" widget="radio" nolabel="1" options="{'horizontal': true}"/>
+                  </div>
+                  <div class="col-3 d-flex align-items-center">
+                    <label for="shukka_sales" string="出荷売上" class="o_form_label width-62 flex-shrink-0 me-2 mb-5px" />
+                    <field name="shukka_sales" placeholder="出荷売上" class="flex-grow-1" nolabel="1"/>
+                  </div>
+                </div>
+
+                <!-- Tiếp theo các fields -->
+                <div class="d-flex">
+                  <label for="business_office" string="営業所" class="o_form_label flex-shrink-0 me-2 mb-5px width-90" />
+                  <field name="business_office" placeholder="営業所" class="flex-grow-1" nolabel="1" style="width: 400px;"/>
+                </div>
+
+                <div class="row">
+                  <div class="col-6 pe-2">
+                    <div class="d-flex align-items-center">
+                      <label for="shukka_planned_date" string="出荷予定日" class="flex-shrink-0 me-2 mb-5px width-90" />
+                      <field name="shukka_planned_date" placeholder="出荷予定日" class="flex-grow-1" nolabel="1" />
+                    </div>
+                  </div>
+                  <div class="col-6 ps-2">
+                    <div class="d-flex align-items-center">
+                      <label for="delivery_date_search" string="納期" class="flex-shrink-0 me-2 mb-5px" style="width: 80px;" />
+                      <field name="delivery_date_search" placeholder="納期" class="flex-grow-1" nolabel="1" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex">
+                  <label for="sales_order_number" string="受注番号" class="o_form_label flex-shrink-0 me-2 mb-5px width-90" />
+                  <field name="sales_order_number" placeholder="受注番号" class="flex-grow-1" nolabel="1" style="width: 400px;"/>
+                </div>
+                <div class="d-flex">
+                  <label for="transfer_instruction_number" string="移動指示番号" class="o_form_label flex-shrink-0 me-2 mb-5px width-90" />
+                  <field name="transfer_instruction_number" placeholder="移動指示番号" class="flex-grow-1" nolabel="1" style="width: 400px;"/>
+                </div>
+                <div class="d-flex">
+                  <label for="customer_name" string="得意先名" class="o_form_label flex-shrink-0 me-2 mb-5px width-90" />
+                  <field name="customer_name" placeholder="得意先名" class="flex-grow-1" nolabel="1" style="width: 400px;"/>
+                </div>
+                <div class="d-flex">
+                  <label for="person_in_charge" string="担当者" class="o_form_label flex-shrink-0 me-2 mb-5px width-90" />
+                  <field name="person_in_charge" placeholder="担当者" class="flex-grow-1" nolabel="1" style="width: 400px;"/>
+                </div>
+                <div class="d-flex">
+                  <label for="shipping_company_search" string="配送業者" class="o_form_label flex-shrink-0 me-2 mb-5px width-90" />
+                  <field name="shipping_company_search" placeholder="配送業者" class="flex-grow-1" nolabel="1" style="width: 400px;"/>
+                </div>
+                <div class="d-flex">
+                  <label for="customer_order_number" string="客先注文番号" class="o_form_label flex-shrink-0 me-2 mb-5px width-90" />
+                  <field name="customer_order_number" placeholder="客先注文番号" class="flex-grow-1" nolabel="1" style="width: 400px;"/>
+                </div>
+                <div class="d-flex">
+                  <label for="product_name" string="商品名" class="o_form_label flex-shrink-0 me-2 mb-5px width-90" />
+                  <field name="product_name" placeholder="商品名" class="flex-grow-1" nolabel="1" style="width: 400px;"/>
+                </div>
+                <!-- <field name="sales_order_number" placeholder="受注番号" />
+                <field name="transfer_instruction_number" placeholder="移動指示番号" />
+                <field name="customer_name" placeholder="得意先名" />
+                <field name="person_in_charge" placeholder="担当者" />
+                <field name="shipping_company_search" placeholder="配送業者" />
+                <field name="customer_order_number" placeholder="客先注文番号" />
+                <field name="product_name" placeholder="商品名" /> -->
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================== PHẦN 3: DANH SÁCH SẢN PHẨM ==================== -->
+          <field name="shukka_line_ids" widget="obic_shukka_line_one2many" mode="list" nolabel="1" class="o_field_obic_shukka_line_one2many" context="{'form_view_ref': 'custom_obic_shukka.view_obic_shukka_line_form'}">
+            <list>
+              <field name="sequence" widget="handle" />
+              <field name="transfer_instruction_number_line" />
+              <field name="shukka_destination_warehouse" />
+              <field name="final_delivery_destination" />
+              <field name="is_reserved" />
+              <field name="product_id" />
+              <field name="shukka_number" />
+              <field name="loan_classification" />
+              <field name="delivery_date_line" />
+              <field name="initial_transfer_quantity" />
+              <field name="unshipped_quantity" />
+              <field name="current_shukka_quantity" />
+            </list>
+          </field>
+
+          <!-- ==================== PHẦN 4: 2 NÚT Ở GIỮA ==================== -->
+          <div class="row mt-3">
+            <div class="col-12 text-center">
+              <button name="action_parallel_split" string="詳細分割" type="object" class="btn-secondary me-2" />
+              <button name="action_split_cancel" string="分割解除" type="object" class="btn-secondary" />
+            </div>
+          </div>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- ==================== DIALOG FORM (thêm/edit sản phẩm) ==================== -->
+  <record id="view_obic_shukka_line_form" model="ir.ui.view">
+    <field name="name">obic.shukka.line.form</field>
+    <field name="model">obic.shukka.line</field>
+    <field name="arch" type="xml">
+      <form string="出荷明細">
+        <sheet>
+          <group>
+            <group>
+              <field name="transfer_instruction_number_line" placeholder="移動指示番号" />
+              <field name="shukka_destination_warehouse" placeholder="出荷先倉庫" />
+              <field name="final_delivery_destination" placeholder="最終納入先" />
+              <field name="is_reserved" />
+            </group>
+            <group>
+              <field name="product_id" placeholder="商品" />
+              <field name="shukka_number" placeholder="出荷番号" />
+              <field name="loan_classification" placeholder="貸出区分" />
+              <field name="delivery_date_line" placeholder="納期" />
+            </group>
+          </group>
+          <group>
+            <group>
+              <field name="initial_transfer_quantity" placeholder="当初移動数量" />
+              <field name="unshipped_quantity" placeholder="未出荷数量" />
+              <field name="current_shukka_quantity" placeholder="今回出荷数量" />
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- ==================== LIST VIEW ==================== -->
+  <record id="view_obic_shukka_tree" model="ir.ui.view">
+    <field name="name">obic.shukka.tree</field>
+    <field name="model">obic.shukka</field>
+    <field name="arch" type="xml">
+      <list string="出荷処理一覧">
+        <field name="shukka_number" />
+        <field name="reference_date" />
+        <field name="shukka_date" />
+        <field name="shukka_classification" />
+        <field name="warehouse" />
+        <field name="shipping_company" />
+        <!-- <field name="customer_name" /> -->
+      </list>
+    </field>
+  </record>
+
+  <!-- ==================== SEARCH VIEW ==================== -->
+  <record id="view_obic_shukka_search" model="ir.ui.view">
+    <field name="name">obic.shukka.search</field>
+    <field name="model">obic.shukka</field>
+    <field name="arch" type="xml">
+      <search string="出荷処理検索">
+        <field name="shukka_process_number" />
+        <field name="shukka_classification" />
+        <field name="warehouse" />
+        <field name="customer_name" />
+        <field name="shipping_company" />
+
+        <filter string="倉庫向け" name="filter_warehouse" domain="[('shukka_process_type', '=', 'warehouse')]" />
+
+        <filter string="今日" name="filter_today" domain="[('reference_date', '=', context_today().strftime('%Y-%m-%d'))]" />
+
+        <filter string="今週" name="filter_this_week" domain="[('reference_date', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%Y-%m-%d'))]" />
+
+        <group expand="0" string="Group By">
+          <filter string="出荷区分" name="group_shukka_classification" context="{'group_by': 'shukka_classification'}" />
+          <filter string="倉庫" name="group_warehouse" context="{'group_by': 'warehouse'}" />
+          <filter string="配送業者" name="group_shipping_company" context="{'group_by': 'shipping_company'}" />
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <!-- ==================== ACTION ==================== -->
+  <record id="action_obic_shukka" model="ir.actions.act_window">
+    <field name="name">出荷管理</field>
+    <field name="path">custom_obic_shukka</field>
+    <field name="res_model">obic.shukka</field>
+    <field name="view_mode">list,form</field>
+    <field name="context">{
+      'default_shukka_process_type': 'warehouse',
+      'default_display_unit': 'shipping_detail',
+      'default_sort_details': 'shukka_line',
+      'default_data_classification': 'all',
+      'default_shukka_target': 'all',
+      }</field>
+    <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_obic_shukka_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_obic_shukka_form')}),
+        ]" />
+  </record>
+</odoo>

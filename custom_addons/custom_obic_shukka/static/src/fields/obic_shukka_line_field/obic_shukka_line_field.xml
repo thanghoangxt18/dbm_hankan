@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+  <!-- Custom X2Many Field Template - Override để customize control panel -->
+  <t t-name="custom_obic_shukka.ObicShukkaLineField" t-inherit="web.X2ManyField" t-inherit-mode="primary">
+    <!-- Override control panel để hiển thị buttons -->
+    <xpath expr="//div[hasclass('o_x2m_control_panel')]" position="replace">
+      <div class="d-flex justify-content-between align-items-center" t-if="!props.readonly" style="margin: 9px 0px 20px 0px;">
+        <!-- Left: 出荷明細を追加 button -->
+        <div>
+          <button class="btn btn-primary" t-on-click.prevent="onAdd" t-if="canAdd">
+            <i class="fa fa-plus me-1"/>
+ 出荷明細を追加
+          </button>
+        </div>
+
+        <!-- Right: 4 buttons + 2 bulk action buttons -->
+        <div class="btn-group">
+          <button class="btn btn-secondary" type="button" t-on-click.prevent="onSortDisplay" title="並替表示">
+            並替表示
+          </button>
+          <button class="btn btn-secondary" type="button" t-on-click.prevent="onAutoNumbering" title="自動採番">
+            自動採番
+          </button>
+          <button class="btn btn-secondary" type="button" t-on-click.prevent="onBulkNumbering" title="一括採番">
+            一括採番
+          </button>
+          <button class="btn btn-primary" type="button" t-on-click.prevent="onBulkReserveTrue" title="一括保留">
+            一括保留
+          </button>
+          <button class="btn btn-secondary" type="button" t-on-click.prevent="onBulkReserveFalse" title="一括解除">
+            一括解除
+          </button>
+        </div>
+      </div>
+    </xpath>
+  </t>
+
+  <!-- Main List Renderer Template - Kế thừa từ web.ListRenderer -->
+  <t t-name="custom_obic_shukka.ObicShukkaLineListRenderer" t-inherit="web.ListRenderer" t-inherit-mode="primary">
+    <!-- Ẩn table header -->
+    <xpath expr="//thead" position="attributes">
+      <attribute name="style">display: none;</attribute>
+    </xpath>
+
+    <!-- Override table class để style cho sections -->
+    <xpath expr="//table" position="attributes">
+      <attribute name="class" add="o_obic_shukka_line_table" separator=" "/>
+    </xpath>
+  </t>
+
+  <!-- Custom Record Row Template - Hiển thị dạng section với index trái + 3 dòng details -->
+  <t t-name="custom_obic_shukka.ObicShukkaLineListRenderer.RecordRow">
+    <!-- Format data -->
+    <t t-set="transferNumber" t-value="record.data.transfer_instruction_number_line || '-'" />
+    <t t-set="destinationWarehouse" t-value="record.data.shukka_destination_warehouse || '-'" />
+    <t t-set="finalDestination" t-value="record.data.final_delivery_destination || '-'" />
+    <t t-set="isReserved" t-value="record.data.is_reserved || false" />
+    <t t-set="productName" t-value="record.data.product_id ? record.data.product_id[1] : '-'" />
+    <t t-set="shukkaNumber" t-value="record.data.shukka_number || '-'" />
+    <t t-set="loanClass" t-value="record.data.loan_classification || '-'" />
+    <t t-set="deliveryDate" t-value="record.data.delivery_date_line ? record.data.delivery_date_line.toFormat('yyyy-MM-dd') : '-'" />
+    <t t-set="initialQty" t-value="record.data.initial_transfer_quantity || 0" />
+    <t t-set="unshippedQty" t-value="record.data.unshipped_quantity || 0" />
+    <t t-set="currentQty" t-value="record.data.current_shukka_quantity || 0" />
+
+    <tr class="o_data_row">
+      <td class="o_data_cell" colspan="100">
+        <div class="o_obic_shukka_line_section mb-3">
+          <div class="row g-0">
+            <!-- Index Column (Left - ~60px) -->
+            <div class="col-auto o_obic_section_index">
+              <div class="index-number">
+                <span class="badge bg-secondary">
+                  <t t-esc="record_index + 1"/>
+                </span>
+              </div>
+              <!-- Edit/Delete buttons -->
+              <div class="action-buttons mt-2">
+                <button class="btn btn-sm btn-outline-primary d-block w-100 mb-1" type="button" t-on-click="() => this.props.openRecord(record)" title="編集">
+                  <i class="fa fa-edit"/>
+                </button>
+                <button class="btn btn-sm btn-outline-danger d-block w-100" type="button" t-on-click="() => this.onDeleteRecord(record)" title="削除">
+                  <i class="fa fa-trash"/>
+                </button>
+              </div>
+            </div>
+
+            <!-- Details Column (Right) -->
+            <div class="col o_obic_section_details">
+              <!-- Row 1: 移動指示番号 | 出荷先倉庫 | 最終納入先 | 保留 -->
+              <div class="detail-row row-1">
+                <div class="detail-item col-3">
+                  <small class="label">移動指示番号</small>
+                  <div class="value">
+                    <t t-esc="transferNumber"/>
+                  </div>
+                </div>
+                <div class="detail-item col-3">
+                  <small class="label">出荷先倉庫</small>
+                  <div class="value">
+                    <t t-esc="destinationWarehouse"/>
+                  </div>
+                </div>
+                <div class="detail-item col-3">
+                  <small class="label">最終納入先</small>
+                  <div class="value">
+                    <t t-esc="finalDestination"/>
+                  </div>
+                </div>
+                <div class="detail-item col-3">
+                  <small class="label">保留</small>
+                  <div class="value">
+                    <input type="checkbox" t-att-checked="isReserved ? 'checked' : undefined" disabled="disabled" class="form-check-input" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 2: 商品 (thẳng hàng với 出荷先倉庫) -->
+              <div class="detail-row row-2">
+                <div class="detail-item col-3">
+                  <!-- Empty to align -->
+                </div>
+                <div class="detail-item col-9">
+                  <small class="label">商品</small>
+                  <div class="value fw-bold">
+                    <t t-esc="productName"/>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 3: 出荷番号 | 貸出区分 | 納期 | 当初移動数量 | 未出荷数量 | 今回出荷数量 -->
+              <div class="detail-row row-3">
+                <div class="detail-item col-2">
+                  <small class="label">出荷番号</small>
+                  <div class="value">
+                    <t t-esc="shukkaNumber"/>
+                  </div>
+                </div>
+                <div class="detail-item col-2">
+                  <small class="label">貸出区分</small>
+                  <div class="value">
+                    <t t-esc="loanClass"/>
+                  </div>
+                </div>
+                <div class="detail-item col-2">
+                  <small class="label">納期</small>
+                  <div class="value">
+                    <t t-esc="deliveryDate"/>
+                  </div>
+                </div>
+                <div class="detail-item col-2">
+                  <small class="label">当初移動数量</small>
+                  <div class="value">
+                    <t t-esc="initialQty"/>
+                  </div>
+                </div>
+                <div class="detail-item col-2">
+                  <small class="label">未出荷数量</small>
+                  <div class="value">
+                    <t t-esc="unshippedQty"/>
+                  </div>
+                </div>
+                <div class="detail-item col-2">
+                  <small class="label">今回出荷数量</small>
+                  <div class="value fw-bold text-primary">
+                    <t t-esc="currentQty"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </t>
+
+</templates>
