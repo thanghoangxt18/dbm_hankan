@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ROOT MENU -->
+    <menuitem id="menu_obic_warehouse_move_root" 
+              name="OBIC倉庫移動" 
+              sequence="20"/>
+              
+    <!-- MAIN MENU -->
+    <menuitem id="menu_obic_warehouse_move_main" 
+              name="倉庫移動処理" 
+              parent="menu_obic_warehouse_move_root" 
+              action="action_obic_warehouse_move" 
+              sequence="10"/>
+</odoo>

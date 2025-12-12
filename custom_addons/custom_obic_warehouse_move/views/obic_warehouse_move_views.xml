@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- FORM VIEW (Main) -->
+  <record id="view_obic_warehouse_move_form" model="ir.ui.view">
+    <field name="name">obic.warehouse.move.form</field>
+    <field name="model">obic.warehouse.move</field>
+    <field name="arch" type="xml">
+      <form string="倉庫移動入力" class="o_obic_warehouse_move_form">
+        <sheet>
+          <!-- PHẦN HEADER: Layout 6 cột -->
+          <div class="header">
+            <group col="6">
+              <group colspan="1" col="1">
+                <div class="d-flex align-items-center mb-2">
+                  <field name="view_mode" widget="selection" nolabel="1"
+                    class="obic_mode_select input-field" style="width: 50px;" />
+                </div>
+              </group>
+              <group colspan="2" col="1">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="move_number" string="移動番号"
+                    class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+                  <field name="move_number" placeholder="移動番号" nolabel="1"
+                    class="flex-grow-1 input-field" />
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                  <label for="copy_source_move_number" string="複写元移動番号"
+                    class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+                  <field name="copy_source_move_number" placeholder="複写元移動番号" nolabel="1"
+                    class="flex-grow-1 input-field" />
+                </div>
+              </group>
+              <!-- <group colspan="1"/> -->
+              <group colspan="1" />
+              <group colspan="1" />
+              <group colspan="1" col="1">
+                <div class="d-flex align-items-center mb-2">
+                  <label for="reference_date" string="基準日"
+                    class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+                  <field name="reference_date" nolabel="1" class="flex-grow-1 input-field" />
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                  <label for="previous_move_number" string="前回移動番号"
+                    class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+                  <field name="previous_move_number" nolabel="1" class="flex-grow-1 input-field" />
+                </div>
+              </group>
+            </group>
+          </div>
+
+          <!-- PHẦN MAIN: Mỗi dòng layout 12 cột -->
+          <div class="obic_warehouse_move_container form_obic">
+            <div class="main-info-section pt-2">
+              <group col="12">
+                <!-- Dòng 1 -->
+                <group colspan="3">
+                  <label for="business_office" string="事業所"
+                    class="flex-shrink-0 me-2 mb-5px field-blue pd-top-bot-2" />
+                  <field name="business_office" placeholder="事業所" nolabel="1" class="flex-grow-1" />
+                </group>
+                <group colspan="3">
+                  <label for="transaction_classification" string="取引区分"
+                    class="flex-shrink-0 me-2 mb-5px field-blue pd-top-bot-2" />
+                  <field name="transaction_classification" placeholder="取引区分" nolabel="1"
+                    class="flex-grow-1" />
+                </group>
+                <group colspan="6" />
+              </group>
+
+              <group col="12">
+                <!-- Dòng 2 -->
+                <group colspan="3">
+                  <label for="move_date" string="移動日"
+                    class="flex-shrink-0 me-2 mb-5px field-blue pd-top-bot-2" />
+                  <field name="move_date" placeholder="移動日" nolabel="1" class="flex-grow-1" />
+                </group>
+                <group colspan="3">
+                  <label for="project_number" string="案件番号"
+                    class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+                  <field name="project_number" placeholder="案件番号" nolabel="1" class="flex-grow-1" />
+                </group>
+                <group colspan="6" />
+              </group>
+
+              <group col="12">
+                <!-- Dòng 3 -->
+                <group colspan="3">
+                  <label for="person_in_charge" string="担当者"
+                    class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+                  <field name="person_in_charge" placeholder="担当者" nolabel="1" class="flex-grow-1" />
+                </group>
+                <group colspan="3">
+                  <label for="person_in_charge_department" string="担当者部門"
+                    class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+                  <field name="person_in_charge_department" placeholder="担当者部門" nolabel="1"
+                    class="flex-grow-1" />
+                </group>
+                <group colspan="6" />
+              </group>
+
+              <group col="12">
+                <!-- Dòng 4 -->
+                <group colspan="3">
+                  <label for="outgoing_warehouse" string="出庫倉庫"
+                    class="flex-shrink-0 me-2 mb-5px field-blue pd-top-bot-2" />
+                  <field name="outgoing_warehouse" placeholder="出庫倉庫" nolabel="1"
+                    class="flex-grow-1" />
+                </group>
+                <group colspan="3">
+                  <label for="incoming_warehouse" string="入庫倉庫"
+                    class="flex-shrink-0 me-2 mb-5px field-blue pd-top-bot-2" />
+                  <field name="incoming_warehouse" placeholder="入庫倉庫" nolabel="1"
+                    class="flex-grow-1" />
+                </group>
+                <group colspan="6" />
+              </group>
+
+              <group col="12">
+                <!-- Dòng 5 -->
+                <group colspan="3">
+                  <label for="outgoing_stock_location" string="出庫在庫場所"
+                    class="flex-shrink-0 me-2 mb-5px field-blue pd-top-bot-2" />
+                  <field name="outgoing_stock_location" placeholder="出庫在庫場所" nolabel="1"
+                    class="flex-grow-1" />
+                </group>
+                <group colspan="3">
+                  <label for="incoming_stock_location" string="入庫在庫場所"
+                    class="flex-shrink-0 me-2 mb-5px field-blue pd-top-bot-2" />
+                  <field name="incoming_stock_location" placeholder="入庫在庫場所" nolabel="1"
+                    class="flex-grow-1" />
+                </group>
+                <group colspan="6" />
+              </group>
+
+              <group col="12">
+                <!-- Dòng 6 -->
+                <group colspan="3">
+                  <label for="shipping_company" string="配送業者"
+                    class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+                  <field name="shipping_company" placeholder="配送業者" nolabel="1" class="flex-grow-1" />
+                </group>
+                <group colspan="3">
+                  <label for="slip_summary" string="伝票摘要"
+                    class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+                  <field name="slip_summary" placeholder="伝票摘要" nolabel="1" class="flex-grow-1" />
+                </group>
+                <group colspan="3">
+                  <button name="action_arrangement_deployment" string="手配展開" type="object"
+                    class="btn-secondary button-obic" />
+                </group>
+                <group colspan="3" />
+              </group>
+            </div>
+          </div>
+
+          <!-- PHẦN DANH SÁCH SẢN PHẨM -->
+          <div class="obic_warehouse_move_container form_obic">
+            <field name="move_line_ids"
+              widget="obic_warehouse_move_line_one2many"
+              mode="list"
+              nolabel="1"
+              context="{'form_view_ref': 'custom_obic_warehouse_move.view_obic_warehouse_move_line_form'}">
+              <list>
+                <field name="sequence" widget="handle" />
+                <field name="line_number" />
+                <field name="move_classification" />
+                <field name="outgoing_business_office" />
+                <field name="incoming_business_office" />
+                <field name="outgoing_warehouse_line" />
+                <field name="incoming_warehouse_line" />
+                <field name="outgoing_stock_location_line" />
+                <field name="incoming_stock_location_line" />
+                <field name="product_id" />
+                <field name="total_quantity" />
+                <field name="move_unit_price" />
+                <field name="move_amount" />
+              </list>
+            </field>
+
+            <!-- PHẦN TỔNG -->
+            <group col="12">
+              <group colspan="7" />
+              <group colspan="5">
+                <label for="total_move_amount" string="合計" class="fw-bold flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+                <field name="total_move_amount" widget="monetary" nolabel="1" readonly="1"
+                  class="text-primary fs-4 fw-bold" />
+              </group>
+            </group>
+          </div>
+
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- DIALOG FORM (Modal Thêm/Sửa Sản Phẩm) -->
+  <record id="view_obic_warehouse_move_line_form" model="ir.ui.view">
+    <field name="name">obic.warehouse.move.line.form</field>
+    <field name="model">obic.warehouse.move.line</field>
+    <field name="arch" type="xml">
+      <form string="倉庫移動明細" class="o_obic_warehouse_move_line_form">
+        <style>
+          .modal-content {
+            max-width: 100%;
+          }
+          .modal-header {
+            background-color: rgba(58, 110, 165, 1) !important;
+            color: #fff !important;
+          }
+          .modal-header .modal-title {
+            color: #fff !important;
+          }
+          .modal-header .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+          }
+          .modal-body {
+            background-color: rgba(226, 226, 226) !important;
+          }
+          .o_form_view {
+            background-color: rgba(226, 226, 226) !important;
+          }
+          .o_form_sheet_bg {
+            background-color: rgba(226, 226, 226) !important;
+          }
+          .o_form_sheet {
+            background-color: rgba(226, 226, 226) !important;
+            max-width: 100% !important;
+          }
+          .o_form_renderer {
+            display: block !important;
+          }
+          .modal-footer {
+            background-color: rgba(226, 226, 226) !important;
+            <!-- justify-content: flex-end !important; -->
+          }
+          .btn-secondary {
+            border: 1px solid #000 !important;
+          }
+        </style>
+        <sheet>
+          <!-- Dòng 1: 2-3-3 -->
+          <group col="12">
+            <group colspan="2">
+              <!-- Hiển thị view_mode từ parent -->
+              <div class="o_form_label text-muted">照会</div>
+            </group>
+            <group colspan="3" class="custom_label">
+              <label for="continuous_input" string="連続入力"
+                class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="continuous_input" placeholder="連続入力" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="3" class="custom_label">
+              <label for="move_classification" string="移動区分" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="move_classification" placeholder="移動区分" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="4" />
+          </group>
+
+          <!-- Dòng 2: 2-3-3 -->
+          <group col="12">
+            <group colspan="2">
+              <label for="line_number" string="行番号" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="line_number" placeholder="行番号" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="3" class="custom_label">
+              <label for="outgoing_business_office" string="出庫事業所" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="outgoing_business_office" placeholder="出庫事業所" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="3" class="custom_label">
+              <label for="incoming_business_office" string="入庫事業所" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="incoming_business_office" placeholder="入庫事業所" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="4" />
+          </group>
+
+          <!-- Dòng 3: 2-3-3 -->
+          <group col="12">
+            <group colspan="2">
+              <label for="sort_order" string="並び順" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="sort_order" placeholder="並び順" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="3" class="custom_label">
+              <label for="outgoing_warehouse_line" string="出庫倉庫" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="outgoing_warehouse_line" placeholder="出庫倉庫" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="3" class="custom_label">
+              <label for="incoming_warehouse_line" string="入庫倉庫" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="incoming_warehouse_line" placeholder="入庫倉庫" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="4" />
+          </group>
+
+          <!-- Dòng 4: skip 2, 3-3 -->
+          <group col="12">
+            <group colspan="2" />
+            <group colspan="3" class="custom_label">
+              <label for="outgoing_stock_location_line" string="出庫在庫場所" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="outgoing_stock_location_line" placeholder="出庫在庫場所" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="3" class="custom_label">
+              <label for="incoming_stock_location_line" string="入庫在庫場所" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="incoming_stock_location_line" placeholder="入庫在庫場所" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="4" />
+          </group>
+
+          <!-- Dòng 5: skip 2, 6 -->
+          <group col="12">
+            <group colspan="2" />
+            <group colspan="6" class="custom_label">
+              <label for="product_id" string="商品" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="product_id" placeholder="商品" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="4" />
+          </group>
+
+          <!-- Dòng 6: skip 2, 3-3 -->
+          <group col="12">
+            <group colspan="2" />
+            <group colspan="3" class="custom_label_long">
+              <label for="specify_outgoing_shelf_breakdown" string="出庫棚番を内訳で指定する" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="specify_outgoing_shelf_breakdown" placeholder="出庫棚番を内訳で指定する" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="3" class="custom_label_long">
+              <label for="specify_incoming_shelf_breakdown" string="入庫棚番を内訳で指定する" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="specify_incoming_shelf_breakdown" placeholder="入庫棚番を内訳で指定する" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="4" />
+          </group>
+
+          <!-- Dòng 7: skip 2, 3-3 -->
+          <group col="12">
+            <group colspan="2" />
+            <group colspan="3" class="custom_label">
+              <label for="outgoing_shelf_number" string="出庫棚番" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="outgoing_shelf_number" placeholder="出庫棚番" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="3" class="custom_label">
+              <label for="incoming_shelf_number" string="入庫棚番" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="incoming_shelf_number" placeholder="入庫棚番" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="4" />
+          </group>
+
+          <!-- Dòng 8: skip 2, mỗi field 2 cột -->
+          <group col="12">
+            <group colspan="2" />
+            <group colspan="2">
+              <label for="package_form" string="荷姿" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="package_form" placeholder="荷姿" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="2">
+              <label for="quantity_per_package" string="入数" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="quantity_per_package" placeholder="入数" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="2">
+              <label for="number_of_packages" string="荷数" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="number_of_packages" placeholder="荷数" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="2">
+              <label for="loose_quantity" string="バラ数" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="loose_quantity" placeholder="バラ数" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="2">
+              <label for="total_quantity" string="数量" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="total_quantity" placeholder="数量" nolabel="1" class="flex-grow-1" />
+            </group>
+          </group>
+
+          <!-- Dòng 9: skip 2, 3-3 -->
+          <group col="12">
+            <group colspan="2" />
+            <group colspan="3">
+              <label for="move_unit_price" string="移動単価" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="move_unit_price" placeholder="移動単価" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="3">
+              <label for="move_amount" string="移動金額" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="move_amount" placeholder="移動金額" nolabel="1" readonly="1" class="flex-grow-1" />
+            </group>
+            <group colspan="4" />
+          </group>
+
+          <!-- Dòng 10: skip 2, buttons và field -->
+          <group col="12">
+            <group colspan="2" />
+            <group colspan="2">
+              <button name="action_outgoing_breakdown_input"
+                string="出庫内訳入力"
+                type="object"
+                class="btn-secondary" />
+            </group>
+            <group colspan="2">
+              <button name="action_analysis_code"
+                string="分析コード"
+                type="object"
+                class="btn-secondary" />
+            </group>
+            <group colspan="2">
+              <button name="action_incoming_breakdown_input"
+                string="入庫内訳入力"
+                type="object"
+                class="btn-secondary" />
+            </group>
+            <group colspan="2">
+              <label for="detail_summary" string="移動明細摘要" class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2" />
+              <field name="detail_summary" placeholder="移動明細摘要" nolabel="1" class="flex-grow-1" />
+            </group>
+            <group colspan="2" />
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- LIST VIEW -->
+  <record id="view_obic_warehouse_move_tree" model="ir.ui.view">
+    <field name="name">obic.warehouse.move.tree</field>
+    <field name="model">obic.warehouse.move</field>
+    <field name="arch" type="xml">
+      <list string="倉庫移動一覧">
+        <field name="move_number" />
+        <field name="reference_date" />
+        <field name="move_date" />
+        <field name="business_office" />
+        <field name="outgoing_warehouse" />
+        <field name="incoming_warehouse" />
+        <field name="shipping_company" />
+      </list>
+    </field>
+  </record>
+
+  <!-- SEARCH VIEW -->
+  <record id="view_obic_warehouse_move_search" model="ir.ui.view">
+    <field name="name">obic.warehouse.move.search</field>
+    <field name="model">obic.warehouse.move</field>
+    <field name="arch" type="xml">
+      <search string="倉庫移動検索">
+        <field name="move_number" />
+        <field name="business_office" />
+        <field name="outgoing_warehouse" />
+        <field name="incoming_warehouse" />
+
+        <filter string="今日" name="filter_today"
+          domain="[('reference_date', '=', context_today().strftime('%Y-%m-%d'))]" />
+
+        <group expand="0" string="Group By">
+          <filter string="事業所" name="group_business_office"
+            context="{'group_by': 'business_office'}" />
+          <filter string="出庫倉庫" name="group_outgoing_warehouse"
+            context="{'group_by': 'outgoing_warehouse'}" />
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <!-- ACTION -->
+  <record id="action_obic_warehouse_move" model="ir.actions.act_window">
+    <field name="name">倉庫移動管理</field>
+    <field name="res_model">obic.warehouse.move</field>
+    <field name="path">custom_obic_warehouse_move</field>
+    <field name="view_mode">list,form</field>
+    <field name="context">{}</field>
+  </record>
+</odoo>

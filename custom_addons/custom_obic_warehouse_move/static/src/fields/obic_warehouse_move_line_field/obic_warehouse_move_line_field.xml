@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+  <!-- Custom X2Many Field Template -->
+  <t t-name="custom_obic_warehouse_move.ObicWarehouseMoveLineField" 
+     t-inherit="web.X2ManyField" 
+     t-inherit-mode="primary">
+    <xpath expr="//div[hasclass('o_x2m_control_panel')]" position="replace">
+      <div class="d-flex justify-content-start mb-3" t-if="!props.readonly">
+        <button class="btn btn-primary" 
+                t-on-click.prevent="onAdd" 
+                t-if="canAdd">
+          <i class="fa fa-plus me-1"/>
+          倉庫移動明細を追加
+        </button>
+      </div>
+    </xpath>
+  </t>
+
+  <!-- Main List Renderer Template -->
+  <t t-name="custom_obic_warehouse_move.ObicWarehouseMoveLineListRenderer" 
+     t-inherit="web.ListRenderer" 
+     t-inherit-mode="primary">
+    <xpath expr="//thead" position="attributes">
+      <attribute name="style">display: none;</attribute>
+    </xpath>
+    <xpath expr="//table" position="attributes">
+      <attribute name="class" add="o_obic_warehouse_move_line_table" separator=" "/>
+    </xpath>
+  </t>
+
+  <!-- Custom Record Row - Section Layout -->
+  <t t-name="custom_obic_warehouse_move.ObicWarehouseMoveLineListRenderer.RecordRow">
+    <!-- Lấy dữ liệu -->
+    <t t-set="lineNumber" t-value="record.data.line_number || '-'"/>
+    <t t-set="productName" t-value="record.data.product_id ? record.data.product_id[1] : '-'"/>
+    <t t-set="productCode" t-value="record.data.product_id ? (record.data.product_id[0] ? '規格コード: ' + record.data.product_id[0] : '-') : '-'"/>
+    <t t-set="totalQty" t-value="record.data.total_quantity || 0"/>
+    <t t-set="allocatedQty" t-value="record.data.total_quantity || 0"/>
+    <t t-set="unitPrice" t-value="record.data.move_unit_price || 0"/>
+    <t t-set="amount" t-value="record.data.move_amount || 0"/>
+    
+    <tr class="o_data_row">
+      <td class="o_data_cell" colspan="100">
+        <div class="o_obic_warehouse_move_line_section mb-3">
+          <div class="row g-0">
+            <!-- Index Column (Left ~80px) -->
+            <div class="col-auto o_obic_section_index">
+              <div class="index-number">
+                <span class="badge bg-secondary">
+                  <t t-esc="lineNumber"/>
+                </span>
+              </div>
+              <div class="action-buttons mt-2">
+                <button class="btn btn-sm btn-outline-primary d-block w-100 mb-1" 
+                        type="button" 
+                        t-on-click="() => this.props.openRecord(record)" 
+                        title="編集">
+                  <i class="fa fa-edit"/>
+                </button>
+                <button class="btn btn-sm btn-outline-danger d-block w-100" 
+                        type="button" 
+                        t-on-click="() => this.onDeleteRecord(record)" 
+                        title="削除">
+                  <i class="fa fa-trash"/>
+                </button>
+              </div>
+            </div>
+
+            <!-- Details Column (Right) -->
+            <div class="col o_obic_section_details">
+              <!-- Dòng 1: 商品 | 規格 -->
+              <div class="row mb-1">
+                <div class="col-6 d-flex align-items-center">
+                  <span class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2">商品</span>
+                  <span class="flex-grow-1 fw-bold"><t t-esc="productName"/></span>
+                </div>
+                <div class="col-6 d-flex align-items-center">
+                  <span class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2">規格</span>
+                  <span class="flex-grow-1"><t t-esc="productCode"/></span>
+                </div>
+              </div>
+
+              <!-- Dòng 2: 総数 | 引当数 | 原価単価 | 原価金額 -->
+              <div class="row mb-1">
+                <div class="col-3 d-flex align-items-center">
+                  <span class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2">総数</span>
+                  <span class="flex-grow-1"><t t-esc="totalQty"/></span>
+                </div>
+                <div class="col-3 d-flex align-items-center">
+                  <span class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2">引当数</span>
+                  <span class="flex-grow-1"><t t-esc="allocatedQty"/></span>
+                </div>
+                <div class="col-3 d-flex align-items-center">
+                  <span class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2">原価単価</span>
+                  <span class="flex-grow-1"><t t-esc="unitPrice"/></span>
+                </div>
+                <div class="col-3 d-flex align-items-center">
+                  <span class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2">原価金額</span>
+                  <span class="flex-grow-1 text-primary fw-bold"><t t-esc="amount"/></span>
+                </div>
+              </div>
+
+              <!-- Dòng 3: 出庫事業所 | 出庫倉庫 | 出庫在庫場所 -->
+              <div class="row mb-1">
+                <div class="col-4 d-flex align-items-center">
+                  <span class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2">出庫事業所</span>
+                  <span class="flex-grow-1"><t t-esc="record.data.outgoing_business_office || '-'"/></span>
+                </div>
+                <div class="col-4 d-flex align-items-center">
+                  <span class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2">出庫倉庫</span>
+                  <span class="flex-grow-1"><t t-esc="record.data.outgoing_warehouse_line || '-'"/></span>
+                </div>
+                <div class="col-4 d-flex align-items-center">
+                  <span class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2">出庫在庫場所</span>
+                  <span class="flex-grow-1"><t t-esc="record.data.outgoing_stock_location_line || '-'"/></span>
+                </div>
+              </div>
+
+              <!-- Dòng 4: 入庫事業所 | 入庫倉庫 | 入庫在庫場所 -->
+              <div class="row mb-1">
+                <div class="col-4 d-flex align-items-center">
+                  <span class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2">入庫事業所</span>
+                  <span class="flex-grow-1"><t t-esc="record.data.incoming_business_office || '-'"/></span>
+                </div>
+                <div class="col-4 d-flex align-items-center">
+                  <span class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2">入庫倉庫</span>
+                  <span class="flex-grow-1"><t t-esc="record.data.incoming_warehouse_line || '-'"/></span>
+                </div>
+                <div class="col-4 d-flex align-items-center">
+                  <span class="flex-shrink-0 me-2 mb-5px field-light-blue pd-top-bot-2">入庫在庫場所</span>
+                  <span class="flex-grow-1"><t t-esc="record.data.incoming_stock_location_line || '-'"/></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </t>
+
+</templates>
